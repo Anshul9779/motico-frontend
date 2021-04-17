@@ -1,14 +1,19 @@
 import React from "react";
 import { useHistory } from "react-router";
+import { Card } from "./components/Card/Card";
 import { addUser } from "./redux/slices/user";
 import { login } from "./utils/api";
-import { useAppDispatch } from "./utils/hooks";
+import { useAppDispatch, useAuth } from "./utils/hooks";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const { isAuthenticated } = useAuth();
+  if (isAuthenticated) {
+    history.push("/");
+  }
   return (
-    <div>
+    <div style={{ backgroundColor: "#F2F6F7" }}>
       <form
         action=""
         onSubmit={(e) => {
@@ -29,6 +34,13 @@ export default function Login() {
         <input type="password" name="password" placeholder="Password" />
         <button type="submit">Login</button>
       </form>
+      <div style={{ display: "flex" }}>
+        <Card>
+          <Card.Header>Header</Card.Header>
+          <Card.Body>Body</Card.Body>
+          <Card.Footer></Card.Footer>
+        </Card>
+      </div>
     </div>
   );
 }

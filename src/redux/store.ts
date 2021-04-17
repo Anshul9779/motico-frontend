@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "./slices/user";
+import notificationReducer from "./slices/notifications";
 import thunk from "redux-thunk";
 
 const persistConfig = {
@@ -11,6 +12,7 @@ const persistConfig = {
 
 const reducers = combineReducers({
   user: userReducer,
+  notification: notificationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

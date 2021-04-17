@@ -1,0 +1,42 @@
+.card {
+  min-width: 10rem;
+  border-radius: 0.5rem;
+}
+.card-title {
+  border-radius: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.card-header-dark {
+  background: linear-gradient(90deg, #6f374c 0%, #c94b7c 100%);
+}
+.card-header-light {
+  background: linear-gradient(90deg, #f26e87 0%, #f79b84 100%);
+}
+.card-body {
+  padding: 0.5rem;
+}
+.card-body-bg-none {
+  background-color: white;
+  color: #4f5f68;
+}
+.card-body-bg-dark {
+  background: linear-gradient(90deg, #6f374c 0%, #c94b7c 100%);
+}
+.card-body-bg-light {
+  background: linear-gradient(90deg, #f26e87 0%, #f79b84 100%);
+}
+.card-footer {
+  padding: 0.5rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background-color: white;
+}
+
+.card-footer-bg-dark {
+  background: linear-gradient(90deg, #6f374c 0%, #c94b7c 100%);
+}
+.card-footer-bg-light {
+  background: linear-gradient(90deg, #f26e87 0%, #f79b84 100%);
+}
