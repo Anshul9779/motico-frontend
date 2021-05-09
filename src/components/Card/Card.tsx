@@ -4,24 +4,26 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-interface HeaderProps extends HTMLAttributes<HTMLDivElement> {
+export type CardBackground = "dark" | "light" | "none" | "orange" | "gradient";
+
+export interface HeaderProps extends HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
-  background?: "dark" | "light";
+  background?: CardBackground;
 }
 
-interface BodyProps extends HTMLAttributes<HTMLDivElement> {
+export interface BodyProps extends HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
-  background?: "dark" | "light" | "none";
+  background?: CardBackground;
 }
 
-interface FooterProps extends HTMLAttributes<HTMLDivElement> {
+export interface FooterProps extends HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
-  background?: "dark" | "light" | "none";
+  background?: CardBackground;
 }
 
 const Header = ({ children, background = "dark", ...props }: HeaderProps) => {
   return (
-    <div className={`card-title card-header-${background}`} {...props}>
+    <div className={`card-title bg-${background}`} {...props}>
       {children}
     </div>
   );
@@ -29,7 +31,7 @@ const Header = ({ children, background = "dark", ...props }: HeaderProps) => {
 
 const Body = ({ children, background = "none", ...props }: BodyProps) => {
   return (
-    <div className={`card-body card-body-bg-${background}`} {...props}>
+    <div className={`card-body bg-${background}`} {...props}>
       {children}
     </div>
   );
@@ -41,7 +43,7 @@ const Footer = ({
   ...props
 }: FooterProps): JSX.Element => {
   return (
-    <div className={`card-footer card-footer-bg-${background}`} {...props}>
+    <div className={`card-footer bg-${background}`} {...props}>
       {children}
     </div>
   );

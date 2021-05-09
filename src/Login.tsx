@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router";
-import { Card } from "./components/Card/Card";
 import { addUser } from "./redux/slices/user";
 import { login } from "./utils/api";
 import { useAppDispatch, useAuth } from "./utils/hooks";
@@ -34,13 +33,6 @@ export default function Login() {
         <input type="password" name="password" placeholder="Password" />
         <button type="submit">Login</button>
       </form>
-      <div style={{ display: "flex" }}>
-        <Card>
-          <Card.Header>Header</Card.Header>
-          <Card.Body>Body</Card.Body>
-          <Card.Footer></Card.Footer>
-        </Card>
-      </div>
     </div>
   );
 }

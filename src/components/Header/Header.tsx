@@ -2,6 +2,7 @@ import React from "react";
 import { useNotifications } from "../../utils/hooks";
 import { VscBell, VscBellDot } from "react-icons/vsc";
 import { MdAccountCircle } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const { notifications } = useNotifications();
@@ -27,9 +28,11 @@ export default function Header() {
           <VscBell style={{ color: "#7EA0B1" }} />
         )}
       </span>
-      <MdAccountCircle
-        style={{ fontSize: "3rem", color: "#4F5F68", cursor: "pointer" }}
-      />
+      <Link to="/logout">
+        <MdAccountCircle
+          style={{ fontSize: "3rem", color: "#4F5F68", cursor: "pointer" }}
+        />
+      </Link>
     </div>
   );
 }

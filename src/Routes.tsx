@@ -8,6 +8,11 @@ import Sidebar from "react-sidebar";
 import UserSidebar from "./components/Sidebar/UserSidebar";
 import Header from "./components/Header/Header";
 import Dashboard from "./Dashboard";
+import CallSummary from "./CallSummary";
+import Analytics from "./Analytics";
+import LiveActivity from "./LiveActivity";
+import Call from "./Call";
+import Barge from "./Barge";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
@@ -30,9 +35,21 @@ export default function Routes() {
             },
           }}
         >
-          <Header />
+          {isAuthenticated && <Header />}
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
+          <PrivateRoute path="/call" redirectTo="/login">
+            <Call />
+          </PrivateRoute>
+          <PrivateRoute path="/live-activity" redirectTo="/login">
+            <LiveActivity />
+          </PrivateRoute>
+          <PrivateRoute path="/analytics" redirectTo="/login">
+            <Analytics />
+          </PrivateRoute>
+          <PrivateRoute path="/call-summary" redirectTo="/login">
+            <CallSummary />
+          </PrivateRoute>
           <PrivateRoute path="/" redirectTo="/login">
             <Dashboard />
           </PrivateRoute>

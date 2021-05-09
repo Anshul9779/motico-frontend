@@ -20,22 +20,19 @@ export default function PrivateRoute({
 }: PrivateRouteProps) {
   const { isAuthenticated } = useAuth();
   return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        isAuthenticated ? (
-          children
-        ) : unauthenticatedComponent ? (
-          unauthenticatedComponent
-        ) : (
-          <Redirect
-            to={{
-              pathname: redirectTo,
-              state: { from: location },
-            }}
-          />
-        )
-      }
-    />
+    <Route {...rest} path={path} exact>
+      {isAuthenticated ? (
+        children
+      ) : unauthenticatedComponent ? (
+        unauthenticatedComponent
+      ) : (
+        <Redirect
+          to={{
+            pathname: redirectTo,
+            state: { from: path },
+          }}
+        />
+      )}
+    </Route>
   );
 }

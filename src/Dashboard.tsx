@@ -1,8 +1,11 @@
 import React from "react";
 import { Card } from "./components/Card/Card";
-import { FiActivity, FiPhoneCall } from "react-icons/fi";
-import { RiDonutChartFill } from "react-icons/ri";
 import { GiTimeTrap } from "react-icons/gi";
+import { Link } from "react-router-dom";
+import LiveActivity from "./images/live_activity.jpg";
+import Analytics from "./images/analytics.jpg";
+import CallSummary from "./images/call_summary.jpg";
+import StatsCard from "./components/Card/StatsCard";
 
 export default function Dashboard() {
   return (
@@ -29,110 +32,47 @@ export default function Dashboard() {
         }}
       >
         <div style={{ flex: 2, display: "flex", gap: "1rem" }}>
-          <div style={{ flex: 1.5 }}>
-            <Card style={{ cursor: "pointer" }}>
-              <Card.Header
-                background="light"
-                style={{ padding: "1.5rem", paddingBottom: 0 }}
-              >
-                Call Summary
-              </Card.Header>
-              <Card.Body
-                background="light"
-                style={{ textAlign: "center", paddingTop: "0.5rem" }}
-              >
-                <FiPhoneCall style={{ color: "white", fontSize: "5.2rem" }} />
-              </Card.Body>
-              <Card.Footer background="light" />
-            </Card>
-            <Card style={{ cursor: "pointer", marginTop: "2.5rem" }}>
-              <Card.Header
-                background="dark"
-                style={{ padding: "1.5rem", paddingBottom: 0 }}
-              >
-                Analytics
-              </Card.Header>
-              <Card.Body
-                background="dark"
-                style={{ textAlign: "center", paddingTop: "0.5rem" }}
-              >
-                <RiDonutChartFill
-                  style={{ color: "white", fontSize: "5.2rem" }}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", gap: "1em", marginBottom: "1em" }}>
+              <Link to="/call-summary" style={{ textDecoration: "none" }}>
+                <img
+                  src={CallSummary}
+                  alt="Cal Summary"
+                  style={{ borderRadius: "8px" }}
                 />
-              </Card.Body>
-              <Card.Footer background="dark" />
-            </Card>
-          </div>
-          <div style={{ flex: 1 }}>
-            <Card style={{ cursor: "pointer" }}>
-              <Card.Header
-                background="dark"
-                style={{ padding: "1.5rem", paddingBottom: 0 }}
-              >
-                Live Activity
-              </Card.Header>
-              <Card.Body
-                background="dark"
-                style={{ textAlign: "center", paddingTop: "0.5rem" }}
-              >
-                <FiActivity style={{ color: "white", fontSize: "5.2rem" }} />
-              </Card.Body>
-              <Card.Footer background="dark" />
-            </Card>
-            <Card style={{ cursor: "pointer", marginTop: "2.5rem" }}>
-              <Card.Header
-                background="light"
-                style={{ padding: "1.5rem", paddingBottom: 0 }}
-              >
-                Call Duration
-              </Card.Header>
-              <Card.Body
-                background="light"
-                style={{ textAlign: "center", paddingTop: "0.5rem" }}
-              >
-                <GiTimeTrap style={{ color: "white", fontSize: "5.2rem" }} />
-              </Card.Body>
-              <Card.Footer background="light" />
-            </Card>
+              </Link>
+
+              <Link to="/live-activity" style={{ textDecoration: "none" }}>
+                <img
+                  src={LiveActivity}
+                  alt="Live Activity"
+                  style={{ borderRadius: "8px" }}
+                />
+              </Link>
+            </div>
+            <Link to="/analytics" style={{ textDecoration: "none" }}>
+              <img
+                src={Analytics}
+                alt="Analytics"
+                style={{ borderRadius: "8px" }}
+              />
+            </Link>
           </div>
         </div>
         <div style={{ flex: 1 }}>
-          <Card style={{ cursor: "pointer" }}>
-            <Card.Header background="light" style={{ padding: "0.75rem" }}>
-              Total Numbers
-            </Card.Header>
-            <Card.Body
-              background="none"
-              style={{ textAlign: "center", paddingTop: "0.5rem" }}
-            >
-              <div style={{ fontSize: "2rem" }}>345</div>
-            </Card.Body>
-            <Card.Footer background="none" />
-          </Card>
-          <Card style={{ cursor: "pointer", marginTop: "1rem" }}>
-            <Card.Header background="dark" style={{ padding: "0.75rem" }}>
-              Free Incoming Min
-            </Card.Header>
-            <Card.Body
-              background="none"
-              style={{ textAlign: "center", paddingTop: "0.5rem" }}
-            >
-              <div style={{ fontSize: "2rem" }}>2,300 Min</div>
-            </Card.Body>
-            <Card.Footer background="none" />
-          </Card>
-          <Card style={{ cursor: "pointer", marginTop: "1rem" }}>
-            <Card.Header background="light" style={{ padding: "0.75rem" }}>
-              Total Users
-            </Card.Header>
-            <Card.Body
-              background="none"
-              style={{ textAlign: "center", paddingTop: "0.5rem" }}
-            >
-              <div style={{ fontSize: "2rem" }}>345</div>
-            </Card.Body>
-            <Card.Footer background="none" />
-          </Card>
+          <StatsCard
+            title="Total Numbers"
+            body="345"
+            theme="light"
+            style={{ marginBottom: "1.5em" }}
+          />
+          <StatsCard
+            title="Free Incoming Min"
+            body="2,300 Min"
+            theme="dark"
+            style={{ marginBottom: "1.5em" }}
+          />
+          <StatsCard title="Total Users" body="345" theme="light" />
         </div>
       </div>
     </div>

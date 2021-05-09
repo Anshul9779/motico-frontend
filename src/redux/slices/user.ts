@@ -8,6 +8,8 @@ interface UserState {
   lastName: string;
   email: string;
   id: string;
+  companyId: string;
+  roles: string[];
   validTill: Date;
 }
 
@@ -18,6 +20,8 @@ const initialState: UserState = {
   lastName: "",
   email: "",
   id: "",
+  companyId: "",
+  roles: [],
   validTill: new Date(),
 };
 
@@ -40,6 +44,8 @@ export const userSlice = createSlice({
       state.lastName = action.payload.lastName ?? "";
       state.email = action.payload.email;
       state.id = action.payload.id;
+      state.companyId = action.payload.companyId;
+      state.roles = action.payload.roles;
       state.validTill = new Date(
         action.payload.issuedAt + action.payload.validTime
       );
@@ -53,6 +59,8 @@ export const userSlice = createSlice({
       state.lastName = "";
       state.email = "";
       state.id = "";
+      state.roles = [];
+      state.companyId = "";
       state.validTill = new Date();
     },
   },

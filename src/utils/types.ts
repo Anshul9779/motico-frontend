@@ -9,6 +9,8 @@ export interface LoginPayload extends BasicUser {
   issuedAt: number;
   token: string;
   validTime: number;
+  roles: string[];
+  companyId: string;
 }
 
 export {};
