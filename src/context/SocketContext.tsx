@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import { useAuth } from "../utils/hooks";
 
-const SOCKET_URL = "http://localhost:8080";
+const SOCKET_URL = "http://ec2-3-133-95-225.us-east-2.compute.amazonaws.com/";
 
 const SocketContext = React.createContext<
   Socket<DefaultEventsMap, DefaultEventsMap> | undefined
@@ -48,9 +48,5 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
 export const useSocket = () => {
   const socket = useContext(SocketContext);
-  const { isAuthenticated } = useAuth();
-  if (!socket && isAuthenticated) {
-    throw new Error("Cannot use useSocket outside SocketProvider");
-  }
   return socket as Socket<DefaultEventsMap, DefaultEventsMap>;
 };

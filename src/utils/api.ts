@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { LoginPayload } from "./types";
 
-const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "http://ec2-3-133-95-225.us-east-2.compute.amazonaws.com/";
 
 const axios = Axios.create({
   baseURL: SERVER_URL,
