@@ -1,7 +1,7 @@
 import Axios from "axios";
-import { LoginPayload } from "./types";
+import { LoginPayload, Phonenumber } from "./types";
 
-const SERVER_URL = "http://ec2-3-133-95-225.us-east-2.compute.amazonaws.com/";
+const SERVER_URL = "http://localhost:8080/";
 
 const axios = Axios.create({
   baseURL: SERVER_URL,
@@ -122,4 +122,15 @@ export const callAnalyticsCummulated = async () => {
     endTime -= 24 * 60 * 60 * 1000;
   }
   return data.reverse();
+};
+
+export const getRegisteredPhone = () => {
+  const token = getToken();
+  return axios
+    .get("/api/phonenumber/registered", {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    })
+    .then((data) => data.data as Phonenumber[]);
 };

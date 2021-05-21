@@ -13,4 +13,20 @@ export interface LoginPayload extends BasicUser {
   companyId: string;
 }
 
+export interface Phonenumber {
+  area: string;
+  assignedTo: [];
+  available: boolean;
+  company: string;
+  number: string;
+  cost: number;
+  country: string;
+  isRecording: boolean;
+  name: string;
+  purchasedOn: number;
+  twillioId: string;
+  voiceMail: boolean;
+  _id: string;
+}
+
 export {};

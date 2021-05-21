@@ -12,7 +12,7 @@ import CallSummary from "./CallSummary";
 import Analytics from "./Analytics";
 import LiveActivity from "./LiveActivity";
 import Call from "./Call";
-import Barge from "./Barge";
+import Numbers from "./Numbers";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
@@ -52,6 +52,9 @@ export default function Routes() {
           </PrivateRoute>
           <PrivateRoute path="/" redirectTo="/login">
             <Dashboard />
+          </PrivateRoute>
+          <PrivateRoute path="/numbers" redirectTo="/login">
+            <Numbers />
           </PrivateRoute>
         </Sidebar>
       </Switch>
