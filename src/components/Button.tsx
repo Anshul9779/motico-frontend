@@ -10,6 +10,7 @@ export interface ButtonProps
   children?: React.ReactNode;
   isLink?: boolean;
   href?: string;
+  style?: any;
 }
 
 export default function Button({
@@ -17,6 +18,7 @@ export default function Button({
   children,
   isLink,
   href,
+  style,
   ...rest
 }: ButtonProps) {
   return (
@@ -28,6 +30,7 @@ export default function Button({
         borderRadius: 4,
         border: "none",
         cursor: "pointer",
+        ...style,
       }}
       {...rest}
     >
