@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Spinner } from "react-activity";
 
 export interface ButtonProps
   extends React.DetailedHTMLProps<
@@ -11,6 +12,7 @@ export interface ButtonProps
   isLink?: boolean;
   href?: string;
   style?: any;
+  loading?: boolean;
 }
 
 export default function Button({
@@ -18,6 +20,8 @@ export default function Button({
   children,
   isLink,
   href,
+  loading,
+  disabled,
   style,
   ...rest
 }: ButtonProps) {
@@ -30,11 +34,14 @@ export default function Button({
         borderRadius: 4,
         border: "none",
         cursor: "pointer",
+        opacity: disabled ? 0.5 : 1,
         ...style,
       }}
       {...rest}
     >
-      {isLink && href ? (
+      {loading ? (
+        <Spinner color="white" animating={true} size={10} />
+      ) : isLink && href ? (
         <Link to={href}>{title ? title : children}</Link>
       ) : title ? (
         title

@@ -29,4 +29,30 @@ export interface Phonenumber {
   _id: string;
 }
 
+export interface Country {
+  name: string;
+  code: string;
+  imagePath: string;
+}
+
+export interface AvailablePhoneNumber {
+  addressRequirements: string;
+  beta: boolean;
+  capabilities: {
+    mms: boolean;
+    sms: boolean;
+    voice: boolean;
+  };
+  friendlyName: string;
+  isoCountry: Country["code"];
+  lata: string;
+  latitude: string;
+  locality: string;
+  longitude: string;
+  phoneNumber: string;
+  postalCode: string;
+  rateCenter: string;
+  region: string;
+}
+
 export {};

@@ -3,11 +3,12 @@ import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import { useAuth } from "../utils/hooks";
 
-const SOCKET_URL = "http://ec2-3-133-95-225.us-east-2.compute.amazonaws.com/";
+const SOCKET_URL = "https://moticosolutions.com/";
 
-const SocketContext = React.createContext<
-  Socket<DefaultEventsMap, DefaultEventsMap> | undefined
->(undefined);
+const SocketContext =
+  React.createContext<Socket<DefaultEventsMap, DefaultEventsMap> | undefined>(
+    undefined
+  );
 
 export const SOCKET = {
   START_CONNECTION: "START_CONNECTION",

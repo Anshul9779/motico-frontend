@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import { getRegisteredPhone } from "./utils/api";
@@ -6,6 +7,7 @@ import { Phonenumber } from "./utils/types";
 
 export default function Numbers() {
   const [numbers, setNumbers] = useState<Phonenumber[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     getRegisteredPhone().then(setNumbers);
@@ -32,7 +34,9 @@ export default function Numbers() {
             }}
           >
             <Input placeholder="Search For" />
-            <Button>Buy Number</Button>
+            <Button onClick={() => history.push("/numbers/search")}>
+              Buy Number
+            </Button>
           </div>
         </div>
         <div style={{ marginTop: "2em" }}>

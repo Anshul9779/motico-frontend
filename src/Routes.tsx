@@ -13,6 +13,8 @@ import Analytics from "./Analytics";
 import LiveActivity from "./LiveActivity";
 import Call from "./Call";
 import Numbers from "./Numbers";
+import NumberCountry from "./NumberCountry";
+import SearchPhoneNumber from "./components/SearchPhoneNumber";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
@@ -52,6 +54,12 @@ export default function Routes() {
           </PrivateRoute>
           <PrivateRoute path="/" redirectTo="/login">
             <Dashboard />
+          </PrivateRoute>
+          <PrivateRoute path="/numbers/search" redirectTo="/login">
+            <NumberCountry />
+          </PrivateRoute>
+          <PrivateRoute path="/numbers/search/:countryCode" redirectTo="/login">
+            <SearchPhoneNumber />
           </PrivateRoute>
           <PrivateRoute path="/numbers" redirectTo="/login">
             <Numbers />

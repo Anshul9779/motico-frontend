@@ -1,6 +1,4 @@
 import React from "react";
-import { Card } from "./components/Card/Card";
-import { GiTimeTrap } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import LiveActivity from "./images/live_activity.jpg";
 import Analytics from "./images/analytics.jpg";

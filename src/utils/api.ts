@@ -1,7 +1,12 @@
 import Axios from "axios";
-import { LoginPayload, Phonenumber } from "./types";
+import {
+  AvailablePhoneNumber,
+  Country,
+  LoginPayload,
+  Phonenumber,
+} from "./types";
 
-const SERVER_URL = "http://localhost:8080/";
+const SERVER_URL = "https://moticosolutions.com/";
 
 const axios = Axios.create({
   baseURL: SERVER_URL,
@@ -31,7 +36,8 @@ const getToken = () => {
     if (parsedToken.validTill > new Date().getTime()) {
       return parsedToken.token;
     }
-    throw new Error("TOKEN EXPIRED");
+    // If token expired -> redirect to logout
+    window.location.href = "/logout";
   }
 };
 
@@ -133,4 +139,54 @@ export const getRegisteredPhone = () => {
       },
     })
     .then((data) => data.data as Phonenumber[]);
+};
+
+export const getAvailablePhoneNumbers = (
+  country: Country["code"],
+  type: "LOCAL" | "TOLLFREE" | "MOBILE",
+  areaCode?: number,
+  region?: string
+) => {
+  const token = getToken();
+  return axios
+    .post(
+      "/api/twillio/phonenumber/search",
+      {
+        country,
+        type,
+        areaCode,
+        region,
+      },
+      {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      }
+    )
+    .then((data) => data.data as AvailablePhoneNumber[]);
+};
+
+export const buyNumber = (
+  phoneNumber: string,
+  name: string,
+  country: Country["code"],
+  area: string
+) => {
+  const token = getToken();
+  return axios
+    .post(
+      "/api/twillio/phonenumber/buy",
+      {
+        phoneNumber,
+        name,
+        country,
+        area,
+      },
+      {
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      }
+    )
+    .then((data) => data.data as Phonenumber);
 };

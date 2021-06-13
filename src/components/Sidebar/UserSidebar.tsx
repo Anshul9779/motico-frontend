@@ -13,8 +13,13 @@ export default function UserSidebar() {
       />
       <div style={{ marginTop: "4rem" }}>
         <SideTitle Icon={MdDashboard} title={"Dashboard"} link="/" />
-        <SideTitle Icon={AiOutlineFieldNumber} title={"numbers"} link="/call" />
-        <SideTitle Icon={MdPeople} title={"users"} link="/" />
+        <SideTitle
+          Icon={AiOutlineFieldNumber}
+          title={"numbers"}
+          link="/numbers"
+        />
+
+        <SideTitle Icon={MdPeople} title={"users"} link="/call" />
         <SideTitle Icon={AiFillHeart} title={"teams"} link="/" />
         <SideTitle Icon={AiOutlineFieldNumber} title={"numbers"} link="/" />
         <SideTitle Icon={MdPeople} title={"users"} link="/" />
