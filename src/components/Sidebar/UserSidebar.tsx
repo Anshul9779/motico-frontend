@@ -19,9 +19,9 @@ export default function UserSidebar() {
           link="/numbers"
         />
 
-        <SideTitle Icon={MdPeople} title={"users"} link="/call" />
-        <SideTitle Icon={AiFillHeart} title={"teams"} link="/" />
-        <SideTitle Icon={AiOutlineFieldNumber} title={"numbers"} link="/" />
+        <SideTitle Icon={MdPeople} title={"users"} link="/users" />
+        <SideTitle Icon={AiFillHeart} title={"teams"} link="/teams" />
+        <SideTitle Icon={AiOutlineFieldNumber} title={"numbers"} link="/call" />
         <SideTitle Icon={MdPeople} title={"users"} link="/" />
         <SideTitle Icon={AiFillHeart} title={"teams"} link="/" />
       </div>

@@ -20,8 +20,6 @@ export default function PhoneNumberCard({
     friendlyName: friendly_name,
     locality,
     isoCountry: iso_country,
-    latitude,
-    longitude,
   } = phoneNumber;
   const [showModal, setShowModal] = useState(false);
   const [buying, setBuying] = useState(false);

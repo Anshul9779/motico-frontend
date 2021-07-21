@@ -120,6 +120,7 @@ export default function Dialer({
       callStreamRef.current = newStream;
       recorderRef.current = new MediaRecorder(newStream);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -204,6 +205,7 @@ export default function Dialer({
     //   _device.destroy();
     //   onDisconnect();
     // };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, device]);
   if (device) {
     return (

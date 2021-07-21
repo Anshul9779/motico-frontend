@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { addUser } from "./redux/slices/user";
-import { login } from "./utils/api";
+import { resetPassword } from "./utils/api";
 import { useAppDispatch, useAuth } from "./utils/hooks";
 import BGImage from "./images/login_bg.png";
 import Input from "./components/Input";
 import Button from "./components/Button";
 
-export default function Login() {
+export default function ResetPassword() {
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const { isAuthenticated } = useAuth();
+  const { id } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  if (isAuthenticated) {
-    history.push("/");
-  }
-  console.log(BGImage);
+
   return (
     <div
       style={{
@@ -58,11 +55,15 @@ export default function Login() {
           onSubmit={(e) => {
             e.preventDefault();
             const target = e.target as typeof e.target & {
-              email: { value: string };
-              password: { value: string };
+              oldPassword: { value: string };
+              newPassword: { value: string };
             };
             setLoading(true);
-            login(target.email.value, target.password.value)
+            resetPassword(
+              target.oldPassword.value,
+              target.newPassword.value,
+              id
+            )
               .then((loginPayload) => {
                 dispatch(addUser(loginPayload));
                 if (loginPayload.roles.includes("PASSWORD_RESET")) {
@@ -90,7 +91,7 @@ export default function Login() {
               margin: "1em 0",
             }}
           >
-            SIGN IN
+            Reset Password
           </div>
           <div
             style={{
@@ -99,7 +100,11 @@ export default function Login() {
               justifyContent: "center",
             }}
           >
-            <Input name="email" placeholder="Username" />
+            <Input
+              name="oldPassword"
+              type="password"
+              placeholder="Old Password"
+            />
           </div>
           <div
             style={{
@@ -108,7 +113,11 @@ export default function Login() {
               justifyContent: "center",
             }}
           >
-            <Input name="password" type="password" placeholder="Password" />
+            <Input
+              name="newPassword"
+              type="password"
+              placeholder="New Password"
+            />
           </div>
           {error && (
             <div
@@ -133,7 +142,7 @@ export default function Login() {
                 padding: "0.5em 2.5em",
               }}
             >
-              {loading ? "Loading..." : "Login"}
+              {loading ? "Loading..." : "Save"}
             </Button>
           </div>
           {/* <button type="submit">Login</button> */}

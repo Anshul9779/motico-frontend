@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useQuery } from "react-query";
 import { useHistory } from "react-router";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import { getRegisteredPhone } from "./utils/api";
-import { Phonenumber } from "./utils/types";
 
 export default function Numbers() {
-  const [numbers, setNumbers] = useState<Phonenumber[]>([]);
+  const { data: numbers } = useQuery("registeredPhone", () => {
+    return getRegisteredPhone();
+  });
   const history = useHistory();
-
-  useEffect(() => {
-    getRegisteredPhone().then(setNumbers);
-  }, []);
 
   return (
     <div style={{ padding: "1.5em" }}>
@@ -111,7 +109,7 @@ export default function Numbers() {
             </tr>
             <div style={{ marginTop: "1.5em" }}></div>
 
-            {numbers.map((number, index) => {
+            {numbers?.map((number, index) => {
               return (
                 <tr
                   style={{

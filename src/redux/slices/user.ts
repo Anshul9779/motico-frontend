@@ -39,6 +39,9 @@ export const userSlice = createSlice({
         })
       );
       state.isAuthenticated = true;
+      if (action.payload.roles.includes("PASSWORD_RESET")) {
+        state.isAuthenticated = false;
+      }
       state.token = action.payload.token;
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName ?? "";

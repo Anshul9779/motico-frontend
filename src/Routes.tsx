@@ -15,6 +15,13 @@ import Call from "./Call";
 import Numbers from "./Numbers";
 import NumberCountry from "./NumberCountry";
 import SearchPhoneNumber from "./components/SearchPhoneNumber";
+import Teams from "./Teams";
+import NewTeam from "./NewTeam";
+import Users from "./Users";
+import User from "./User";
+import NewUser from "./NewUser";
+import ResetPassword from "./ResetPassword";
+import CallDuration from "./CallDuration";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
@@ -40,11 +47,30 @@ export default function Routes() {
           {isAuthenticated && <Header />}
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
+          <Route path="/reset" component={ResetPassword} />
+          <PrivateRoute path="/teams/new" redirectTo="/login">
+            <NewTeam />
+          </PrivateRoute>
+          <PrivateRoute path="/users/new" redirectTo="/login">
+            <NewUser />
+          </PrivateRoute>
+          <PrivateRoute path="/users" redirectTo="/login">
+            <Users />
+          </PrivateRoute>
+          <PrivateRoute path="/users/:id" redirectTo="/login">
+            <User />
+          </PrivateRoute>
+          <PrivateRoute path="/teams" redirectTo="/login">
+            <Teams />
+          </PrivateRoute>
           <PrivateRoute path="/call" redirectTo="/login">
             <Call />
           </PrivateRoute>
           <PrivateRoute path="/live-activity" redirectTo="/login">
             <LiveActivity />
+          </PrivateRoute>
+          <PrivateRoute path="/call-duration" redirectTo="/login">
+            <CallDuration />
           </PrivateRoute>
           <PrivateRoute path="/analytics" redirectTo="/login">
             <Analytics />

@@ -7,8 +7,9 @@ import {
 } from "./types";
 
 const SERVER_URL = "https://moticosolutions.com/";
+// const SERVER_URL = "http://localhost:8080/";
 
-const axios = Axios.create({
+export const axios = Axios.create({
   baseURL: SERVER_URL,
   timeout: 5000,
 });
@@ -24,7 +25,21 @@ export const login = async (
   return data.data;
 };
 
-const getToken = () => {
+export const resetPassword = async (
+  oldPassword: string,
+  newPassword: string,
+  userId: string
+) => {
+  return axios
+    .post("/api/reset-password", {
+      oldPassword,
+      newPassword,
+      userId,
+    })
+    .then((data) => data.data);
+};
+
+export const getToken = () => {
   const stringified = localStorage.getItem("TOKEN");
   if (!stringified) {
     throw new Error("TOKEN NOT FOUND");
@@ -43,7 +58,7 @@ const getToken = () => {
 
 export const getOnlineUsers = async (): Promise<
   {
-    id: Account["id"];
+    id: string;
     name: string;
     avatarURL?: string;
   }[]

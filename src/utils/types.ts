@@ -3,6 +3,7 @@ export interface BasicUser {
   lastName?: string;
   email: string;
   id: string;
+  phoneNumbers: string[];
 }
 
 export interface LoginPayload extends BasicUser {
@@ -15,7 +16,7 @@ export interface LoginPayload extends BasicUser {
 
 export interface Phonenumber {
   area: string;
-  assignedTo: [];
+  assignedTo: string[];
   available: boolean;
   company: string;
   number: string;
@@ -53,6 +54,12 @@ export interface AvailablePhoneNumber {
   postalCode: string;
   rateCenter: string;
   region: string;
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  numUsers: number;
 }
 
 export {};

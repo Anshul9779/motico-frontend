@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import LiveActivity from "./images/live_activity.jpg";
-import Analytics from "./images/analytics.jpg";
+import Analytics from "./images/analytics.png";
+import CallDuration from "./images/callduration.png";
 import CallSummary from "./images/call_summary.jpg";
 import StatsCard from "./components/Card/StatsCard";
 
@@ -48,13 +49,22 @@ export default function Dashboard() {
                 />
               </Link>
             </div>
-            <Link to="/analytics" style={{ textDecoration: "none" }}>
-              <img
-                src={Analytics}
-                alt="Analytics"
-                style={{ borderRadius: "8px" }}
-              />
-            </Link>
+            <div style={{ display: "flex", gap: "1em", marginBottom: "1em" }}>
+              <Link to="/analytics" style={{ textDecoration: "none" }}>
+                <img
+                  src={Analytics}
+                  alt="Analytics"
+                  style={{ borderRadius: "8px", maxWidth: 375 }}
+                />
+              </Link>
+              <Link to="/call-duration" style={{ textDecoration: "none" }}>
+                <img
+                  src={CallDuration}
+                  alt="Analytics"
+                  style={{ borderRadius: "8px", maxWidth: 275 }}
+                />
+              </Link>
+            </div>
           </div>
         </div>
         <div style={{ flex: 1 }}>
