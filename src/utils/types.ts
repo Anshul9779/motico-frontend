@@ -63,3 +63,20 @@ export interface Team {
 }
 
 export {};
+
+type Status = "DISABLED" | "TEXT" | "AUDIO";
+export interface PhoneSettings {
+  callQueing: boolean;
+  canPause: boolean;
+  canRecord: boolean;
+  documentStatus: "UPLOADED" | "VERIFIED" | "PENDING" | "NOT_UPLOADED";
+  greetingMessageInfo: string;
+  greetingMessageStatus: Status;
+  ivrData: string;
+  ivrInfo: string;
+  ivrStatus: Status;
+  phoneNumber: Phonenumber;
+  voiceMailInfo: string;
+  voiceMailStatus: Status;
+  _id: string;
+}

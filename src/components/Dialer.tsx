@@ -87,12 +87,12 @@ export default function Dialer({
     setStatus("CONNECTING");
     const { callRecordID } = await callConnectId(
       "+18564153631",
-      "+1" + phoneNumber
+      "+" + phoneNumber
     );
     setCallRecordId(callRecordID);
     device.connect({
       from: "+18564153631",
-      to: "+1" + phoneNumber,
+      to: "+" + phoneNumber,
       callRecordID,
       isAdmin: "false",
     });

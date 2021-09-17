@@ -118,6 +118,9 @@ export default function Numbers() {
                     borderRadius: 8,
                   }}
                   key={number._id}
+                  onClick={() => {
+                    history.push(`/numbers/settings/${number._id}`);
+                  }}
                 >
                   <td
                     style={{

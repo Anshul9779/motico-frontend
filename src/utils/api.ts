@@ -6,8 +6,8 @@ import {
   Phonenumber,
 } from "./types";
 
-const SERVER_URL = "https://moticosolutions.com/";
-// const SERVER_URL = "http://localhost:8080/";
+// const SERVER_URL = "https://moticosolutions.com/";
+const SERVER_URL = "http://localhost:8080/";
 
 export const axios = Axios.create({
   baseURL: SERVER_URL,
@@ -84,7 +84,7 @@ export const callConnectId = async (from: string, to: string) => {
   const token = getToken();
   return await axios
     .post(
-      "/api/twillio/outgoing/start",
+      "/api/twillio/outgoing/id",
       {
         from,
         to,

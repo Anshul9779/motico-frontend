@@ -22,6 +22,7 @@ import User from "./User";
 import NewUser from "./NewUser";
 import ResetPassword from "./ResetPassword";
 import CallDuration from "./CallDuration";
+import Settings from "./PhoneSettings/Settings";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
@@ -89,6 +90,9 @@ export default function Routes() {
           </PrivateRoute>
           <PrivateRoute path="/numbers" redirectTo="/login">
             <Numbers />
+          </PrivateRoute>
+          <PrivateRoute path="/numbers/settings/:id" redirectTo="/login">
+            <Settings />
           </PrivateRoute>
         </Sidebar>
       </Switch>
