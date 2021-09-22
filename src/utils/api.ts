@@ -11,7 +11,7 @@ const SERVER_URL = "http://localhost:8080/";
 
 export const axios = Axios.create({
   baseURL: SERVER_URL,
-  timeout: 5000,
+  timeout: 50000,
 });
 
 export const login = async (

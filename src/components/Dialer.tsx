@@ -9,6 +9,7 @@ interface DialerProps {
   phoneNumber: string;
   device: Device;
   token: string;
+  onStart: () => void;
   onDisconnect: () => void;
   setRecorderURL: (url: string) => void;
 }
@@ -22,6 +23,17 @@ type DialerStatus =
   | "UPLOADING"
   | "DISCONNECTED"
   | "ERROR";
+
+const STATUS_TO_MSG: Record<DialerStatus, string> = {
+  "ON CALL": "On Call",
+  CONNECTING: "Connecting",
+  DISCONNECTED: "Disconnected",
+  ERROR: "Error",
+  IDLE: "Call",
+  READY: "Call",
+  RINGING: "Ringing",
+  UPLOADING: "Uploading",
+};
 
 const uploadToS3 = async ({
   recorderURL,
@@ -47,6 +59,7 @@ export default function Dialer({
   phoneNumber,
   token,
   device,
+  onStart,
   onDisconnect,
   setRecorderURL,
 }: DialerProps) {
@@ -82,6 +95,15 @@ export default function Dialer({
     device.activeConnection()?.mute(!muted);
     setMuted(!muted);
   };
+
+  useEffect(() => {
+    if (status === "CONNECTING") {
+      onStart?.();
+    }
+    if (status === "DISCONNECTED") {
+      onDisconnect?.();
+    }
+  }, [status]);
 
   const startCall = async () => {
     setStatus("CONNECTING");
@@ -209,30 +231,35 @@ export default function Dialer({
   }, [token, device]);
   if (device) {
     return (
-      <div style={{ marginTop: 10 }}>
-        <h3>
-          Device Status : <code>{status}</code>
-        </h3>
-        {canConnect && (
-          <button style={{ marginRight: 20 }} onClick={startCall}>
-            Connect
-          </button>
-        )}
-        {canDisconnect && (
-          <button
-            onClick={() => {
+      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <button
+          style={{
+            width: "90%",
+            padding: "0.5em",
+            fontSize: "0.9em",
+            backgroundColor: "#CA4C7C",
+            outline: "none",
+            border: "1px solid white",
+            borderRadius: "0.3em",
+            color: "white",
+          }}
+          onClick={() => {
+            if (canConnect) {
+              startCall();
+            } else {
               device.disconnectAll();
-            }}
-          >
-            Disconnect
-          </button>
-        )}
-        {canDisconnect && (
+            }
+          }}
+        >
+          {STATUS_TO_MSG[status]}
+        </button>
+
+        {/* {canDisconnect && (
           <div>
             You are {muted ? "muted" : "not muted"}
             <button onClick={toggleMute}>{muted ? "Unute" : "Mute"}</button>
           </div>
-        )}
+        )} */}
       </div>
     );
   }

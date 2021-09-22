@@ -22,7 +22,15 @@ export default function IVRSettings({
 }) {
   const [ivrData, setIvrData] = useState<
     { phoneNumberId: string; label: string }[]
-  >(() => JSON.parse(data?.ivrData ?? JSON.stringify([])) ?? []);
+  >(() => {
+    if(!data){
+      return []
+    }
+    if(!data.ivrData){
+      return []
+    }
+    return JSON.parse(data.ivrData)
+  });
   const { data: numberData } = useQuery("registeredPhone", () => {
     return getRegisteredPhone();
   });

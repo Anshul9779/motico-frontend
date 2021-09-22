@@ -49,6 +49,7 @@ export default function Settings() {
   const refetch = useRef(false);
   useEffect(() => {
     if (refetch.current) {
+      console.log("Saving data")
       const token = getToken();
       axios
         .put(
@@ -696,7 +697,7 @@ export default function Settings() {
                             }}
                             value={setting.ivrInfo}
                             onChange={(e) =>
-                              setSetting((oldSetting) => {
+                              {setSetting((oldSetting) => {
                                 if (!oldSetting) {
                                   return null;
                                 }
@@ -705,6 +706,8 @@ export default function Settings() {
                                   ivrInfo: e.target.value,
                                 };
                               })
+                            refetch.current = true
+                            }
                             }
                           />
                         )}
@@ -741,7 +744,7 @@ export default function Settings() {
                         {setting?.ivrStatus === "AUDIO" && (
                           <AWSUploader
                             awsKey={`${id}/ivr`}
-                            initialURL={setting.greetingMessageInfo}
+                            initialURL={setting.ivrInfo}
                             accept="audio/*"
                             onComplete={(key) => {
                               setSetting((oldSetting) => {
@@ -750,7 +753,7 @@ export default function Settings() {
                                 }
                                 return {
                                   ...oldSetting,
-                                  greetingMessageInfo: key,
+                                  ivrInfo: key,
                                 };
                               });
                               refetch.current = true;

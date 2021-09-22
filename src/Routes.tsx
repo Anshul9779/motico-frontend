@@ -29,6 +29,9 @@ export default function Routes() {
   return (
     <Router>
       <Switch>
+        <PrivateRoute path="/call" redirectTo="/login">
+          <Call />
+        </PrivateRoute>
         <Sidebar
           sidebar={<UserSidebar />}
           docked={isAuthenticated}
@@ -63,9 +66,6 @@ export default function Routes() {
           </PrivateRoute>
           <PrivateRoute path="/teams" redirectTo="/login">
             <Teams />
-          </PrivateRoute>
-          <PrivateRoute path="/call" redirectTo="/login">
-            <Call />
           </PrivateRoute>
           <PrivateRoute path="/live-activity" redirectTo="/login">
             <LiveActivity />
