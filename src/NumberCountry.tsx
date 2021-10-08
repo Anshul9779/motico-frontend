@@ -3,11 +3,25 @@ import { countries } from "./utils/countries";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useHistory } from "react-router";
 import { Country } from "./utils/types";
+import WorldMap from "./images/World_Map.jpeg";
 
 export default function NumberCountry() {
   const history = useHistory();
   return (
-    <div style={{ display: "flex", margin: "1em" }}>
+    <div style={{ display: "flex", margin: "1em", position: "relative" }}>
+      <img
+        src={WorldMap}
+        alt="World Map"
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 0,
+          width: "100%",
+        }}
+      />
       <div
         style={{
           flex: 1,
@@ -15,6 +29,7 @@ export default function NumberCountry() {
           alignItems: "center",
           display: "flex",
           flexDirection: "column",
+          zIndex: 2,
         }}
       >
         <h2>Select Country For Number</h2>
@@ -36,6 +51,8 @@ export default function NumberCountry() {
           gap: "1em",
           justifyContent: "center",
           alignItems: "center",
+          zIndex: 2,
+          paddingTop: "4em",
         }}
       >
         {countries.map((country) => {

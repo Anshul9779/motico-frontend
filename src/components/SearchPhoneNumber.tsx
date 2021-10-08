@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { getAvailablePhoneNumbers } from "../utils/api";
 import { canadaState, countries, usaState } from "../utils/countries";
+import { useQuery } from "react-query";
 import { Country, AvailablePhoneNumber } from "../utils/types";
 import PhoneNumberCard from "./PhoneNumberCard";
 
@@ -15,25 +16,33 @@ export default function SearchPhoneNumber() {
   const [region, setRegion] = useState("");
   const [type, setType] = useState<"LOCAL" | "TOLLFREE" | "MOBILE">("LOCAL");
   const [searchBy, setSearchBy] = useState<"AREACODE" | "REGION">("AREACODE");
-  const [results, setResults] = useState<AvailablePhoneNumber[]>([]);
-
-  useEffect(() => {
-    let _areaCode = undefined;
-    let _region = undefined;
-    if (areaCode && areaCode.length === 3 && searchBy === "AREACODE") {
-      try {
-        _areaCode = Number.parseInt(areaCode);
-      } catch (error) {
-        _areaCode = undefined;
+  const {
+    data: results,
+    isError,
+    isLoading,
+  } = useQuery(
+    ["numberSearch", countryCode, type, areaCode, searchBy, region],
+    () => {
+      let _areaCode = undefined;
+      let _region = undefined;
+      if (areaCode && areaCode.length === 3 && searchBy === "AREACODE") {
+        try {
+          _areaCode = Number.parseInt(areaCode);
+        } catch (error) {
+          _areaCode = undefined;
+        }
+      } else if (region && region.length === 2 && searchBy === "REGION") {
+        _region = region;
       }
-    } else if (region && region.length === 2 && searchBy === "REGION") {
-      _region = region;
-    }
 
-    getAvailablePhoneNumbers(countryCode, type, _areaCode, _region).then(
-      (data) => setResults(data)
-    );
-  }, [countryCode, type, areaCode, searchBy, region]);
+      return getAvailablePhoneNumbers(countryCode, type, _areaCode, _region);
+    },
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
+
   return (
     <div style={{ margin: "2em 3em" }}>
       <div
@@ -152,7 +161,7 @@ export default function SearchPhoneNumber() {
           borderRadius: "0.5em",
         }}
       >
-        {results.map((number, index) => {
+        {results?.map((number, index) => {
           return (
             <PhoneNumberCard
               phoneNumber={number}
@@ -161,6 +170,13 @@ export default function SearchPhoneNumber() {
             />
           );
         })}
+        <div style={{ flex: 1, textAlign: "center" }}>
+          {isError
+            ? "Couldn't find phone numbers for this country"
+            : isLoading
+            ? "Loading..."
+            : null}
+        </div>
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ const TeamCard = ({
     <div
       style={{
         width: "25%",
+        maxWidth: "22%",
         flex: 1,
         padding: "0.5em",
         display: "flex",
@@ -143,7 +144,7 @@ export default function Teams() {
       >
         <div>TEAMS</div>
         <div style={{ marginTop: "1em" }}>
-          <div style={{ display: "flex", gap: "1em" }}>
+          <div style={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
             {query?.data?.map((team) => {
               return (
                 <TeamCard
