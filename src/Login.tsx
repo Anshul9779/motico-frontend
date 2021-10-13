@@ -90,7 +90,7 @@ export default function Login() {
               margin: "1em 0",
             }}
           >
-            SIGN IN
+            SIGN IN.
           </div>
           <div
             style={{
