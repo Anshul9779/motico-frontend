@@ -109,16 +109,22 @@ const TeamCard = ({
 
 export default function Teams() {
   const history = useHistory();
-  const query = useQuery("teams", async () => {
-    const data = await axios.post(
-      "/api/teams",
-      {},
-      {
-        headers: { authorization: "Bearer " + getToken() },
-      }
-    );
-    return data.data as Team[];
-  });
+  const query = useQuery(
+    "teams",
+    async () => {
+      const data = await axios.post(
+        "/api/teams",
+        {},
+        {
+          headers: { authorization: "Bearer " + getToken() },
+        }
+      );
+      return data.data as Team[];
+    },
+    {
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
   const mutation = useMutation(
     (teamId: string) => {
       return axios.post(

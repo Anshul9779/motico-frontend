@@ -55,7 +55,7 @@ export default function Routes() {
           <PrivateRoute path="/teams/new" redirectTo="/login">
             <NewTeam />
           </PrivateRoute>
-          <PrivateRoute path="/users/new" redirectTo="/login">
+          <PrivateRoute exact path="/users/new" redirectTo="/login">
             <NewUser />
           </PrivateRoute>
           <PrivateRoute path="/users" redirectTo="/login">

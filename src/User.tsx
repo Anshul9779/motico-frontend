@@ -46,35 +46,52 @@ export default function User() {
     []
   );
   const { id }: { id: string } = useParams();
-  const query = useQuery("registeredPhone", () => {
-    return getRegisteredPhone();
-  });
-  const userQuery = useQuery(["user", id], () => {
-    return axios
-      .post(
-        "/api/admin/user",
-        { userId: id },
-        {
-          headers: {
-            Authorization: "Bearer " + getToken(),
-          },
-        }
-      )
-      .then(
-        (data) =>
-          data.data as {
-            id: string;
-            firstName: string;
-            lastName: string;
-            email: string;
-          }
-      );
-  });
+  const query = useQuery(
+    "registeredPhone",
+    () => {
+      if (id !== "new") return getRegisteredPhone();
+    },
+    {
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
+  const userQuery = useQuery(
+    ["user", id],
+    () => {
+      if (id !== "new")
+        return axios
+          .post(
+            "/api/admin/user",
+            { userId: id },
+            {
+              headers: {
+                Authorization: "Bearer " + getToken(),
+              },
+            }
+          )
+          .then(
+            (data) =>
+              data.data as {
+                id: string;
+                firstName: string;
+                lastName: string;
+                email: string;
+              }
+          );
+    },
+    {
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
   useEffect(() => {
     if (query.data && userQuery.data) {
       setSelectedNumber(
         query.data
-          .filter((phn) => phn.assignedTo.includes(userQuery.data.id))
+          .filter((phn) =>
+            phn.assignedTo.includes(
+              userQuery?.data?.id ?? "NO_THIS_IS_NOT_ICLUDED"
+            )
+          )
           .map((phn) => phn._id)
       );
     }

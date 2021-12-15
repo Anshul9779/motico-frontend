@@ -13,19 +13,31 @@ export default function NewUser() {
     []
   );
   const history = useHistory();
-  const query = useQuery("registeredPhone", () => {
-    return getRegisteredPhone();
-  });
-  const teamsQuery = useQuery("teams", async () => {
-    const data = await axios.post(
-      "/api/teams",
-      {},
-      {
-        headers: { authorization: "Bearer " + getToken() },
-      }
-    );
-    return data.data as Team[];
-  });
+  const query = useQuery(
+    "registeredPhone",
+    () => {
+      return getRegisteredPhone();
+    },
+    {
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
+  const teamsQuery = useQuery(
+    "teams",
+    async () => {
+      const data = await axios.post(
+        "/api/teams",
+        {},
+        {
+          headers: { authorization: "Bearer " + getToken() },
+        }
+      );
+      return data.data as Team[];
+    },
+    {
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
   return (
     <form
       onSubmit={(e) => {
@@ -79,46 +91,58 @@ export default function NewUser() {
 
           <div style={{ marginTop: "1em" }}>
             <label htmlFor="">Allocate Department</label>
-            <select
-              name="team"
-              id=""
-              required
-              style={{
-                marginLeft: "1.5em",
-                padding: "0.5em 1em",
-                border: "none",
-                outline: "none",
-                borderRadius: "1em",
-                backgroundColor: "#EEE",
-              }}
-            >
-              {teamsQuery.data?.map((te) => {
-                return <option value={te.id}>{te.name}</option>;
-              })}
-            </select>
+            {teamsQuery.isLoading ? (
+              <span style={{ marginLeft: "1em", opacity: 0.5 }}>
+                Loading ...
+              </span>
+            ) : (
+              <select
+                name="team"
+                id=""
+                required
+                style={{
+                  marginLeft: "1.5em",
+                  padding: "0.5em 1em",
+                  border: "none",
+                  outline: "none",
+                  borderRadius: "1em",
+                  backgroundColor: "#EEE",
+                }}
+              >
+                {teamsQuery.data?.map((te) => {
+                  return <option value={te.id}>{te.name}</option>;
+                })}
+              </select>
+            )}
           </div>
           <div style={{ marginTop: "1em" }}>
             <div>Allocate Numbers</div>
             <div style={{ margin: "1.5em", display: "flex", gap: "1em" }}>
-              {query.data?.map((phone, index) => {
-                return (
-                  <PhoneCard
-                    data={phone}
-                    index={index}
-                    key={phone._id}
-                    selected={selectedNumber.includes(phone._id)}
-                    onClick={() => {
-                      if (selectedNumber.includes(phone._id)) {
-                        setSelectedNumber(
-                          selectedNumber.filter((n) => n !== phone._id)
-                        );
-                      } else {
-                        setSelectedNumber([...selectedNumber, phone._id]);
-                      }
-                    }}
-                  />
-                );
-              })}
+              {query.isLoading ? (
+                <span style={{ marginLeft: "1em", opacity: 0.5 }}>
+                  Loading ...
+                </span>
+              ) : (
+                query.data?.map((phone, index) => {
+                  return (
+                    <PhoneCard
+                      data={phone}
+                      index={index}
+                      key={phone._id}
+                      selected={selectedNumber.includes(phone._id)}
+                      onClick={() => {
+                        if (selectedNumber.includes(phone._id)) {
+                          setSelectedNumber(
+                            selectedNumber.filter((n) => n !== phone._id)
+                          );
+                        } else {
+                          setSelectedNumber([...selectedNumber, phone._id]);
+                        }
+                      }}
+                    />
+                  );
+                })
+              )}
             </div>
           </div>
           <p style={{ fontStyle: "italic" }}>

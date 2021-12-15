@@ -10,17 +10,23 @@ import DataTable from "react-data-table-component";
 
 export default function Users() {
   const history = useHistory();
-  const query = useQuery("users", () => {
-    return axios
-      .post(
-        "/api/admin/user/get-company",
-        {},
-        {
-          headers: { authorization: "Bearer " + getToken() },
-        }
-      )
-      .then((data) => data.data as BasicUser[]);
-  });
+  const query = useQuery(
+    "users",
+    () => {
+      return axios
+        .post(
+          "/api/admin/user/get-company",
+          {},
+          {
+            headers: { authorization: "Bearer " + getToken() },
+          }
+        )
+        .then((data) => data.data as BasicUser[]);
+    },
+    {
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
   const mutation = useMutation(
     (userId: string) => {
       return axios.post(
