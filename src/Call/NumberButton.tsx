@@ -25,8 +25,8 @@ const NumberButton = ({
       }}
       onClick={onClick}
     >
-      <div style={{ fontSize: "3.5em" }}>{number}</div>
-      <div>{characters}</div>
+      <div style={{ fontSize: "3em", fontWeight: "bold" }}>{number}</div>
+      <div>{characters?.toUpperCase() ?? " "}</div>
     </button>
   );
 };

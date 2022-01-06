@@ -64,7 +64,7 @@ export default function Dialer({
   setRecorderURL,
 }: DialerProps) {
   const [status, setStatus] = useState<DialerStatus>("IDLE");
-  const [muted, setMuted] = useState(false);
+  // const [muted, setMuted] = useState(false);
   const socket = useSocket();
   const [callRecordId, setCallRecordId] = useState("");
   const callStreamRef = useRef(new MediaStream());
@@ -90,11 +90,11 @@ export default function Dialer({
     status === "ON CALL" ||
     status === "RINGING"
   );
-  const canDisconnect = !canConnect;
-  const toggleMute = () => {
-    device.activeConnection()?.mute(!muted);
-    setMuted(!muted);
-  };
+  // const canDisconnect = !canConnect;
+  // const toggleMute = () => {
+  //   device.activeConnection()?.mute(!muted);
+  //   setMuted(!muted);
+  // };
 
   useEffect(() => {
     if (status === "CONNECTING") {
@@ -103,6 +103,7 @@ export default function Dialer({
     if (status === "DISCONNECTED") {
       onDisconnect?.();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const startCall = async () => {

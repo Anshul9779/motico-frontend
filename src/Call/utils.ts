@@ -1,7 +1,7 @@
 export const BUTTONS = [
   {
     number: 1,
-    characters: "",
+    characters: " ",
   },
   {
     number: 2,
@@ -37,7 +37,7 @@ export const BUTTONS = [
   },
   {
     number: "*",
-    characters: "",
+    characters: " ",
   },
   {
     number: 0,
@@ -45,6 +45,6 @@ export const BUTTONS = [
   },
   {
     number: "#",
-    characters: "",
+    characters: " ",
   },
 ];

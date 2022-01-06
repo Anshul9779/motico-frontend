@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { getAvailablePhoneNumbers } from "../utils/api";
 import { canadaState, countries, usaState } from "../utils/countries";
 import { useQuery } from "react-query";
-import { Country, AvailablePhoneNumber } from "../utils/types";
+import { Country } from "../utils/types";
 import PhoneNumberCard from "./PhoneNumberCard";
 
 const getImageByCountryCode = (code: Country["code"]): Country["imagePath"] => {

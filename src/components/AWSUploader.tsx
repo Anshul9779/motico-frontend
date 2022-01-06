@@ -41,6 +41,7 @@ export default function AWSUploader({
       .then((uploadData) => {
         onComplete(uploadData.data.key);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
   useEffect(() => {

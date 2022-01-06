@@ -49,7 +49,7 @@ export default function Settings() {
   const refetch = useRef(false);
   useEffect(() => {
     if (refetch.current) {
-      console.log("Saving data")
+      console.log("Saving data");
       const token = getToken();
       axios
         .put(
@@ -66,6 +66,7 @@ export default function Settings() {
           query.refetch();
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setting]);
 
   return (
@@ -696,8 +697,8 @@ export default function Settings() {
                               borderRadius: "0.5em",
                             }}
                             value={setting.ivrInfo}
-                            onChange={(e) =>
-                              {setSetting((oldSetting) => {
+                            onChange={(e) => {
+                              setSetting((oldSetting) => {
                                 if (!oldSetting) {
                                   return null;
                                 }
@@ -705,10 +706,9 @@ export default function Settings() {
                                   ...oldSetting,
                                   ivrInfo: e.target.value,
                                 };
-                              })
-                            refetch.current = true
-                            }
-                            }
+                              });
+                              refetch.current = true;
+                            }}
                           />
                         )}
                       </div>

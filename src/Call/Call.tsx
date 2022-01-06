@@ -47,7 +47,7 @@ export default function Call() {
             style={{
               flex: 1,
               padding: "2em",
-              paddingTop: "5em",
+              paddingTop: "3em",
               background:
                 "linear-gradient(90deg, rgba(204,87,124,1) 0%, rgba(254,157,122,1) 100%)",
               display: "flex",
