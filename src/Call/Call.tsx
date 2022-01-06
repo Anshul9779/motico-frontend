@@ -1,129 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Device } from "twilio-client";
-import Dialer from "./components/Dialer";
-import { twillioToken } from "./utils/api";
-import Logo from "./images/MotiCo Logo.png";
-
-const Timer = () => {
-  const [seconds, setSeconds] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds((prevSeconds) => prevSeconds + 1);
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-  const minutes = () => {
-    const rounded = Math.round(seconds / 60);
-    if (rounded < 10) {
-      return "0" + rounded;
-    }
-    return rounded;
-  };
-  const formattedSeconds = () => {
-    const rounded = seconds % 60;
-    if (rounded < 10) {
-      return "0" + rounded;
-    }
-    return rounded;
-  };
-  return (
-    <div
-      style={{ color: "white", fontSize: "2em", fontFamily: "monospace" }}
-    >{`${minutes()}:${formattedSeconds()}`}</div>
-  );
-};
-
-const BUTTONS = [
-  {
-    number: 1,
-    characters: "",
-  },
-  {
-    number: 2,
-    characters: "abc",
-  },
-  {
-    number: 3,
-    characters: "def",
-  },
-  {
-    number: 4,
-    characters: "ghi",
-  },
-  {
-    number: 5,
-    characters: "jkl",
-  },
-  {
-    number: 6,
-    characters: "mno",
-  },
-  {
-    number: 7,
-    characters: "pqrs",
-  },
-  {
-    number: 8,
-    characters: "tuv",
-  },
-  {
-    number: 9,
-    characters: "wxyz",
-  },
-  {
-    number: "*",
-    characters: "",
-  },
-  {
-    number: 0,
-    characters: "+",
-  },
-  {
-    number: "#",
-    characters: "",
-  },
-];
-
-const NumberButton = ({
-  number,
-  characters,
-  onClick,
-}: {
-  number: number | string;
-  characters?: string;
-  onClick?: () => void;
-}) => {
-  return (
-    <button
-      style={{
-        border: "none",
-        outline: "none",
-        padding: "0.75em 1.75em",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: "0.3em",
-        cursor: "pointer",
-        alignSelf: "stretch",
-      }}
-      onClick={onClick}
-    >
-      <div style={{ fontSize: "3.5em" }}>{number}</div>
-      <div>{characters}</div>
-    </button>
-  );
-};
+import Dialer from "../components/Dialer";
+import { twillioToken } from "../utils/api";
+import Logo from "./../images/MotiCo Logo.png";
+import NumberButton from "./NumberButton";
+import Timer from "./Timer";
+import { BUTTONS } from "./utils";
 
 export default function Call() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [code, setCode] = useState("+91");
   const [token, setToken] = useState("");
   const [calling, setCalling] = useState(false);
-  const [recorderURL, setRecorderURL] = useState("");
+  const [, setRecorderURL] = useState("");
   const device = useRef(new Device()).current;
 
   useEffect(() => {
@@ -154,12 +43,6 @@ export default function Call() {
             flexDirection: "column",
           }}
         >
-          <div
-            style={{
-              minHeight: "7vw",
-              backgroundColor: "#2B3144",
-            }}
-          ></div>
           <div
             style={{
               flex: 1,

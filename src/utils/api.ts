@@ -6,8 +6,8 @@ import {
   Phonenumber,
 } from "./types";
 
-const SERVER_URL = "https://moticosolutions.com/";
-// const SERVER_URL = "http://localhost:8080/";
+// const SERVER_URL = "https://moticosolutions.com/";
+const SERVER_URL = "http://localhost:8080/";
 
 export const axios = Axios.create({
   baseURL: SERVER_URL,
