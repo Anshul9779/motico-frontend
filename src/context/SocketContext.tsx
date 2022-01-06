@@ -3,12 +3,11 @@ import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import { useAuth } from "../utils/hooks";
 
-const SOCKET_URL = "https://moticosolutions.com/";
+const SOCKET_URL = "http://localhost:8080/";
 
-const SocketContext =
-  React.createContext<Socket<DefaultEventsMap, DefaultEventsMap> | undefined>(
-    undefined
-  );
+const SocketContext = React.createContext<
+  Socket<DefaultEventsMap, DefaultEventsMap> | undefined
+>(undefined);
 
 export const SOCKET = {
   START_CONNECTION: "START_CONNECTION",
@@ -25,7 +24,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const [socket, setSocket] = useState<
     Socket<DefaultEventsMap, DefaultEventsMap>
   >(null!);
-  const { isAuthenticated, email } = useAuth();
+  const { isAuthenticated, token } = useAuth();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -36,10 +35,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     }
 
     const _socket = io(SOCKET_URL);
-    _socket.emit(SOCKET.START_CONNECTION, { email });
+    _socket.emit(SOCKET.START_CONNECTION, { jwt: token });
     setSocket(_socket);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, email]);
+  }, [isAuthenticated, token]);
 
   // IDK Why this error is coming?
   return (

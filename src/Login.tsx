@@ -16,7 +16,7 @@ export default function Login() {
   if (isAuthenticated) {
     history.push("/");
   }
-  console.log(BGImage);
+
   return (
     <div
       style={{

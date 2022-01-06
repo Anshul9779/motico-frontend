@@ -41,7 +41,7 @@ export default function LiveActivity() {
   const socket = useSocket();
   const [onlineUsers, setOnlineUsers] = useState<
     {
-      id: Account["id"];
+      id: string;
       name: string;
       avatarURL?: string;
     }[]
@@ -52,11 +52,24 @@ export default function LiveActivity() {
     getOnlineUsers().then((data) => {
       setOnlineUsers(data);
     });
+
+    const addOnlineUsers = (newUser: {
+      id: string;
+      name: string;
+      avatarURL?: string;
+    }) => {
+      setOnlineUsers((prev) => {
+        if (!prev.find((prevUser) => prevUser.id === newUser.id))
+          return [...prev, newUser];
+        return prev;
+      });
+    };
+
     socket.on(
       SOCKET.USER_ONLINE,
-      (data: { id: Account["id"]; name: string; avatarURL?: string }) => {
+      (data: { id: string; name: string; avatarURL?: string }) => {
         console.log("User Online", data);
-        setOnlineUsers((prev) => [...prev, data]);
+        addOnlineUsers(data);
       }
     );
     socket.on(SOCKET.USER_LOGOUT, (data: { id: string }) => {
