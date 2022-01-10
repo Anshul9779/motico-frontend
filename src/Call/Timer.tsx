@@ -27,7 +27,11 @@ const Timer = () => {
   };
   return (
     <div
-      style={{ color: "white", fontSize: "2em", fontFamily: "monospace" }}
+      style={{
+        color: "white",
+        fontSize: "4em",
+        fontFamily: "monospace",
+      }}
     >{`${minutes()}:${formattedSeconds()}`}</div>
   );
 };

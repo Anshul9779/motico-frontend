@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Device } from "twilio-client";
+import React, { useState } from "react";
 import Dialer from "../components/Dialer";
-import { twillioToken } from "../utils/api";
 import Logo from "./../images/MotiCo Logo.png";
+import LeftSidebar from "./LeftSidebar";
 import NumberButton from "./NumberButton";
 import Timer from "./Timer";
 import { BUTTONS } from "./utils";
@@ -10,14 +9,7 @@ import { BUTTONS } from "./utils";
 export default function Call() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [code, setCode] = useState("+91");
-  const [token, setToken] = useState("");
   const [calling, setCalling] = useState(false);
-  const [, setRecorderURL] = useState("");
-  const device = useRef(new Device()).current;
-
-  useEffect(() => {
-    twillioToken().then(setToken);
-  }, []);
 
   return (
     <div>
@@ -27,6 +19,8 @@ export default function Call() {
             backgroundColor: "#2B3144",
             height: "100vh",
             width: "15vw",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <img
@@ -34,6 +28,7 @@ export default function Call() {
             alt="MotiCo"
             style={{ objectFit: "contain", width: "80%", padding: "1em" }}
           />
+          <LeftSidebar />
         </div>
         <div
           style={{
@@ -161,37 +156,15 @@ export default function Call() {
                   margin: "0.5em 0",
                 }}
               >
-                {token ? (
-                  <Dialer
-                    phoneNumber={code + phoneNumber}
-                    token={token}
-                    key={phoneNumber}
-                    onStart={() => {
-                      setCalling(true);
-                    }}
-                    onDisconnect={() => {
-                      setCalling(false);
-                    }}
-                    device={device}
-                    setRecorderURL={setRecorderURL}
-                  />
-                ) : (
-                  <button
-                    style={{
-                      width: "90%",
-                      padding: "0.5em",
-                      fontSize: "0.9em",
-                      backgroundColor: "#CA4C7C",
-                      outline: "none",
-                      border: "1px solid white",
-                      opacity: 0.7,
-                      borderRadius: "0.3em",
-                      color: "white",
-                    }}
-                  >
-                    Setting Up
-                  </button>
-                )}
+                <Dialer
+                  phoneNumber={code + phoneNumber}
+                  onStart={() => {
+                    setCalling(true);
+                  }}
+                  onDisconnect={() => {
+                    setCalling(false);
+                  }}
+                />
               </div>
             </div>
           </div>{" "}

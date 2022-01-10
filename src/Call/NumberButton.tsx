@@ -22,6 +22,7 @@ const NumberButton = ({
         borderRadius: "0.3em",
         cursor: "pointer",
         alignSelf: "stretch",
+        boxShadow: "0px 0px 3px 2px rgba(0,0,0,0.39)",
       }}
       onClick={onClick}
     >
