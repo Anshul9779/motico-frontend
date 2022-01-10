@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { SOCKET, useSocket } from "../../context/SocketContext";
 import { callConnectId } from "../../utils/api";
 import S3 from "react-aws-s3";
 import { useMutation } from "react-query";
 import { useTwillioDevice } from "./useTwillioDevice";
+import { useAudioRecorder } from "./useAudioRecorder";
 
 interface DialerProps {
   phoneNumber: string;
@@ -62,11 +63,7 @@ export default function Dialer({
   const socket = useSocket();
   const { device, status: deviceStatus, setupDevice } = useTwillioDevice();
   const [callRecordId, setCallRecordId] = useState("");
-  const callStreamRef = useRef(new MediaStream());
-  const callStream = callStreamRef.current;
-  const recorderRef = useRef(new MediaRecorder(callStream));
-  const recorder = recorderRef.current;
-  const chunks = useRef<BlobEvent["data"][]>([]);
+  const { startRecording, stopRecording } = useAudioRecorder(device);
   const mutation = useMutation(uploadToS3, {
     onMutate: () => {
       setStatus("UPLOADING");
@@ -110,6 +107,7 @@ export default function Dialer({
     setStatus("RINGING");
     device.activeConnection()?.once("accept", () => setStatus("ON CALL"));
     onStart?.();
+    startRecording();
   };
 
   const disconnectToServer = () => {
@@ -120,33 +118,12 @@ export default function Dialer({
     // Disconnect call and then destroy device
     device.disconnectAll();
     disconnectToServer();
+    stopRecording(callRecordId, (audioURL, recordId) => {
+      fetch(audioURL);
+    });
     setStatus("DISCONNECTED");
     onDisconnect?.();
   };
-
-  // useEffect(() => {
-  //   recorder.ondataavailable = (e) => {
-  //     chunks.current.push(e.data);
-  //   };
-  //   recorder.onstop = (e) => {
-  //     console.log("Stopped Recording");
-  //     const audioBlob = new Blob(chunks.current, {
-  //       type: "audio/ogg; codecs=opus",
-  //     });
-  //     chunks.current = [];
-  //     const audioURL = URL.createObjectURL(audioBlob);
-  //     console.log(audioURL);
-  //     setRecorderURL(audioURL);
-  //     mutation.mutate({
-  //       recorderURL: audioURL,
-  //       id: callRecordId,
-  //     });
-  //     const newStream = new MediaStream();
-  //     callStreamRef.current = newStream;
-  //     recorderRef.current = new MediaRecorder(newStream);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   if (device) {
     return (
@@ -172,7 +149,6 @@ export default function Dialer({
         >
           {STATUS_TO_MSG[status]}
         </button>
-
         {/* {canDisconnect && (
           <div>
             You are {muted ? "muted" : "not muted"}
