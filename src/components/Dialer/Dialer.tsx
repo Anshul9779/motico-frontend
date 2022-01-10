@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { SOCKET, useSocket } from "../../context/SocketContext";
-import { callConnectId } from "../../utils/api";
-import S3 from "react-aws-s3";
+import { axios, callConnectId, getToken } from "../../utils/api";
 import { useMutation } from "react-query";
 import { useTwillioDevice } from "./useTwillioDevice";
 import { useAudioRecorder } from "./useAudioRecorder";
@@ -40,17 +39,20 @@ const uploadToS3 = async ({
   recorderURL: string;
   id: string;
 }): Promise<"OK"> => {
-  const dirName = new Date().toDateString().replace(" ", "-");
-  const config = {
-    bucketName: process.env.REACT_APP_BUCKET_NAME,
-    dirName: dirName /* optional */,
-    region: process.env.REACT_APP_REGION,
-    accessKeyId: process.env.REACT_APP_ACCESS_ID,
-    secretAccessKey: process.env.REACT_APP_ACCESS_KEY,
-  };
+  const fileName = id + ".ogg";
   const blob = await fetch(recorderURL).then((r) => r.blob());
-  const S3Client = new S3(config);
-  return await S3Client.uploadFile(blob, id + ".opus");
+  const file = new File([blob], fileName);
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("key", "recordings/" + id);
+  return await axios
+    .post("/api/aws/upload", formData, {
+      headers: {
+        authorization: "Bearer " + getToken(),
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(() => "OK");
 };
 
 export default function Dialer({
@@ -118,8 +120,11 @@ export default function Dialer({
     // Disconnect call and then destroy device
     device.disconnectAll();
     disconnectToServer();
-    stopRecording(callRecordId, (audioURL, recordId) => {
-      fetch(audioURL);
+    stopRecording(callRecordId, (recorderURL, id) => {
+      mutation.mutate({
+        recorderURL,
+        id,
+      });
     });
     setStatus("DISCONNECTED");
     onDisconnect?.();
