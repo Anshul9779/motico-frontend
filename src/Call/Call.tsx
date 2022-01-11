@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Dialer from "../components/Dialer";
+import { useUser } from "../utils/hooks";
 import Logo from "./../images/MotiCo Logo.png";
+import Flag from "./Flag";
 import LeftSidebar from "./LeftSidebar";
 import NumberButton from "./NumberButton";
 import Timer from "./Timer";
@@ -10,6 +12,8 @@ export default function Call() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [code, setCode] = useState("+91");
   const [calling, setCalling] = useState(false);
+  const { data } = useUser();
+  const [fromNumber, setFromNumber] = useState(data?.phoneNumbers?.[0].number);
 
   return (
     <div>
@@ -17,7 +21,7 @@ export default function Call() {
         <div
           style={{
             backgroundColor: "#2B3144",
-            height: "100vh",
+            minHeight: "100vh",
             width: "15vw",
             display: "flex",
             flexDirection: "column",
@@ -34,15 +38,15 @@ export default function Call() {
           style={{
             flex: 1,
             display: "flex",
-            height: "100vh",
+            minHeight: "100vh",
             flexDirection: "column",
           }}
         >
           <div
             style={{
               flex: 1,
-              padding: "2em",
-              paddingTop: "3em",
+              padding: "1.75em",
+              paddingTop: "2em",
               background:
                 "linear-gradient(90deg, rgba(204,87,124,1) 0%, rgba(254,157,122,1) 100%)",
               display: "flex",
@@ -53,7 +57,7 @@ export default function Call() {
           >
             <div
               style={{
-                minHeight: "13%",
+                minHeight: "10%",
                 width: "60%",
                 backgroundColor: "#983F75",
                 border: "1px solid white",
@@ -146,16 +150,6 @@ export default function Call() {
                     />
                   );
                 })}
-              </div>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  margin: "0.5em 0",
-                }}
-              >
                 <Dialer
                   phoneNumber={code + phoneNumber}
                   onStart={() => {
@@ -164,10 +158,51 @@ export default function Call() {
                   onDisconnect={() => {
                     setCalling(false);
                   }}
+                  fromNumber={
+                    fromNumber ? fromNumber : data?.phoneNumbers[0].number ?? ""
+                  }
                 />
               </div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  margin: "0.5em 0",
+                  gap: "0.5em",
+                }}
+              >
+                {data && (
+                  <Flag
+                    phoneNumbers={data?.phoneNumbers ?? []}
+                    number={fromNumber ?? ""}
+                  />
+                )}
+                <select
+                  value={fromNumber}
+                  onChange={(e) => setFromNumber(e.target.value)}
+                  style={{
+                    backgroundColor: "#77376D",
+                    outline: "none",
+                    border: "none",
+                    color: "white",
+                    padding: "0.25em",
+                    fontSize: "1.1em",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {data?.phoneNumbers.map((number) => {
+                    return (
+                      <option key={number._id} value={number.number}>
+                        {number.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
-          </div>{" "}
+          </div>
         </div>
       </div>
     </div>

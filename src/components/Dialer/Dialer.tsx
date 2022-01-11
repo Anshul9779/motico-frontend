@@ -9,6 +9,7 @@ interface DialerProps {
   phoneNumber: string;
   onStart: () => void;
   onDisconnect: () => void;
+  fromNumber: string;
 }
 
 type DialerStatus =
@@ -59,6 +60,7 @@ export default function Dialer({
   phoneNumber,
   onStart,
   onDisconnect,
+  fromNumber,
 }: DialerProps) {
   const [status, setStatus] = useState<DialerStatus>("IDLE");
   // const [muted, setMuted] = useState(false);
@@ -95,13 +97,10 @@ export default function Dialer({
       setupDevice();
     }
     setStatus("CONNECTING");
-    const { callRecordID } = await callConnectId(
-      "+18564153631",
-      "+" + phoneNumber
-    );
+    const { callRecordID } = await callConnectId(fromNumber, "+" + phoneNumber);
     setCallRecordId(callRecordID);
     device.connect({
-      from: "+18564153631",
+      from: fromNumber,
       to: "+" + phoneNumber,
       callRecordID,
       isAdmin: "false",
