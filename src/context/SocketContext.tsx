@@ -3,7 +3,11 @@ import { io, Socket } from "socket.io-client";
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import { useAuth } from "../utils/hooks";
 
-const SOCKET_URL = "http://localhost:8080/";
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+
+const SOCKET_URL = isDev
+  ? "http://localhost:8080/"
+  : "https://moticosolutions.com/";
 
 const SocketContext = React.createContext<
   Socket<DefaultEventsMap, DefaultEventsMap> | undefined

@@ -6,8 +6,12 @@ import {
   Phonenumber,
 } from "./types";
 
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+
 // const SERVER_URL = "https://moticosolutions.com/";
-const SERVER_URL = "http://localhost:8080/";
+const SERVER_URL = isDev
+  ? "http://localhost:8080/"
+  : "https://moticosolutions.com/";
 
 export const axios = Axios.create({
   baseURL: SERVER_URL,
