@@ -80,3 +80,16 @@ export interface PhoneSettings {
   voiceMailStatus: Status;
   _id: string;
 }
+
+export interface CallRecord {
+  id: string;
+  callSid: string;
+  isActive: boolean;
+  startTime: number;
+  endTime: number;
+  from: string;
+  to: string;
+  user: BasicUser;
+  type: "OUTGOING" | "INCOMING" | "MISSED";
+  company: string;
+}

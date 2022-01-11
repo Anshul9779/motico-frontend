@@ -6,6 +6,7 @@ import StatsCard from "./components/Card/StatsCard";
 import LiveCalls from "./components/LiveCalls";
 import { SOCKET, useSocket } from "./context/SocketContext";
 import { getOnlineUsers } from "./utils/api";
+import { useActiveCalls } from "./utils/hooks";
 
 interface AvatarWithNameProps extends AvatarProps {
   name: string;
@@ -28,15 +29,6 @@ const AvatarWithName = ({ name, ...rest }: AvatarWithNameProps) => {
   );
 };
 
-export interface SocketCallRecord {
-  from: string;
-  to: string;
-  id: string;
-  agent: string;
-  startTime: number;
-  status: "INCOMING" | "OUTGOING" | "MISSED";
-}
-
 export default function LiveActivity() {
   const socket = useSocket();
   const [onlineUsers, setOnlineUsers] = useState<
@@ -46,9 +38,12 @@ export default function LiveActivity() {
       avatarURL?: string;
     }[]
   >([]);
-  const [userCall, setUserCall] = useState<SocketCallRecord[]>([]);
+  const [callIds, callRecords] = useActiveCalls();
 
   useEffect(() => {
+    if (!socket) {
+      return;
+    }
     getOnlineUsers().then((data) => {
       setOnlineUsers(data);
     });
@@ -77,14 +72,6 @@ export default function LiveActivity() {
       setOnlineUsers((prevOnline) =>
         prevOnline.filter((user) => user.id !== data.id)
       );
-    });
-    socket.on(SOCKET.CALL_ADD, (data: SocketCallRecord) => {
-      console.log("Call Started", data);
-      setUserCall((prev) => [...prev, data]);
-    });
-    socket.on(SOCKET.CALL_END, (data: { id: string }) => {
-      console.log("Call Ended", data);
-      setUserCall((prev) => prev.filter((p) => p.id !== data.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -150,7 +137,7 @@ export default function LiveActivity() {
         />
         <StatsCard
           title="Live Calls"
-          body={userCall.length}
+          body={callIds.length}
           style={{ flex: 1 }}
           bodyTheme="orange"
         />
@@ -175,7 +162,7 @@ export default function LiveActivity() {
           borderRadius: "0 8px 8px 8px ",
         }}
       >
-        <LiveCalls liveCalls={userCall} />
+        <LiveCalls callIds={callIds} callRecords={callRecords} />
       </div>
     </div>
   );

@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { SocketCallRecord } from "../LiveActivity";
 import ReactModal from "react-modal";
 import Barge from "../Barge";
+import { CallRecord } from "../utils/types";
 import BargeImage from "./../images/barge.jpg";
 import Whisper from "./../images/whispher.jpg";
 
 export default function LiveCalls({
-  liveCalls,
+  callIds,
+  callRecords,
 }: {
-  liveCalls: SocketCallRecord[];
+  callIds: string[];
+  callRecords: Record<string, CallRecord>;
 }) {
   const [interceptingCallId, setInterceptingCallId] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -45,23 +47,27 @@ export default function LiveCalls({
           <th style={{ fontWeight: "normal" }}>Status</th>
           <th style={{ fontWeight: "normal" }}>Function</th>
         </tr>
-        {liveCalls.map((call) => {
+        {callIds.map((callId) => {
+          const callRecord = callRecords[callId];
+          if (!callRecord) {
+            return null;
+          }
           return (
-            <tr>
+            <tbody key={callRecord.id}>
               <td style={{ textAlign: "center", paddingTop: "1em" }}>
-                {call.agent}
+                {callRecord.user.firstName}
               </td>
               <td style={{ textAlign: "center", paddingTop: "1em" }}>
-                {call.from}
+                {callRecord.from}
               </td>
               <td style={{ textAlign: "center", paddingTop: "1em" }}>
-                {call.to}
+                {callRecord.to}
               </td>
               <td style={{ textAlign: "center", paddingTop: "1em" }}>
-                {new Date(call.startTime).toLocaleTimeString()}
+                {new Date(callRecord.startTime).toLocaleTimeString()}
               </td>
               <td style={{ textAlign: "center", paddingTop: "1em" }}>
-                {call.status}
+                {callRecord.type[0] + callRecord.type.slice(1).toLowerCase()}
               </td>
               <td
                 style={{
@@ -72,7 +78,7 @@ export default function LiveCalls({
                   justifyContent: "center",
                 }}
                 onClick={() => {
-                  setInterceptingCallId(call.id);
+                  setInterceptingCallId(callRecord.id);
                   setShowModal(true);
                 }}
               >
@@ -93,7 +99,7 @@ export default function LiveCalls({
                   alt=""
                 />
               </td>
-            </tr>
+            </tbody>
           );
         })}
       </table>
