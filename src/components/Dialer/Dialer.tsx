@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { SOCKET, useSocket } from "../../context/SocketContext";
 import { axios, callConnectId, getToken } from "../../utils/api";
 import { useMutation } from "react-query";
 import { useTwillioDevice } from "./useTwillioDevice";
@@ -64,7 +63,6 @@ export default function Dialer({
 }: DialerProps) {
   const [status, setStatus] = useState<DialerStatus>("IDLE");
   // const [muted, setMuted] = useState(false);
-  const socket = useSocket();
   const { device, status: deviceStatus, setupDevice } = useTwillioDevice();
   const [callRecordId, setCallRecordId] = useState("");
   const { startRecording, stopRecording } = useAudioRecorder(device);
@@ -97,11 +95,11 @@ export default function Dialer({
       setupDevice();
     }
     setStatus("CONNECTING");
-    const { callRecordID } = await callConnectId(fromNumber, "+" + phoneNumber);
+    const { callRecordID } = await callConnectId(fromNumber, phoneNumber);
     setCallRecordId(callRecordID);
     device.connect({
       from: fromNumber,
-      to: "+" + phoneNumber,
+      to: phoneNumber,
       callRecordID,
       isAdmin: "false",
     });
@@ -112,7 +110,17 @@ export default function Dialer({
   };
 
   const disconnectToServer = () => {
-    socket.emit(SOCKET.USER_CALL_END, { callID: callRecordId });
+    axios.post(
+      "/api/twillio/outgoing/end",
+      {
+        callId: callRecordId,
+      },
+      {
+        headers: {
+          authorization: "Bearer " + getToken(),
+        },
+      }
+    );
   };
 
   const endCall = async () => {
