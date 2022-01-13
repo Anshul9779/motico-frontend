@@ -14,6 +14,11 @@ import IVRImage from "../images/IVR_Image.png";
 export default function Settings() {
   const { id }: { id: string } = useParams();
   const [setting, setSetting] = useState<PhoneSettings | null>(null);
+  const callRecordRef = useRef<HTMLDivElement>(null);
+  const mnmRef = useRef<HTMLDivElement>(null);
+  const ivrRef = useRef<HTMLDivElement>(null);
+  const allocateRef = useRef<HTMLDivElement>(null);
+  const extensionRef = useRef<HTMLDivElement>(null);
   const userQuery = useQuery("users", () => {
     return axios
       .post(
@@ -71,7 +76,65 @@ export default function Settings() {
 
   return (
     <div style={{ paddingBottom: "2em" }}>
-      <section style={{ display: "flex", gap: "1em", margin: "2em" }}>
+      <div
+        style={{
+          top: 0,
+          left: "1em",
+          right: "1em",
+          backgroundColor: "#2C3243",
+          position: "sticky",
+          display: "flex",
+          padding: "0.5em 2em",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() =>
+            callRecordRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          Call Recording
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() => mnmRef.current?.scrollIntoView({ behavior: "smooth" })}
+        >
+          Music and Messages
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() => ivrRef.current?.scrollIntoView({ behavior: "smooth" })}
+        >
+          IVR
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() =>
+            allocateRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          Allocate Number
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() =>
+            extensionRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          Extension
+        </div>
+      </div>
+      <section
+        ref={callRecordRef}
+        style={{
+          paddingTop: "5vh",
+          display: "flex",
+          gap: "1em",
+          margin: "2em",
+        }}
+      >
         <div style={{ flex: 1 }}>
           <div>
             <Card.Body
@@ -185,7 +248,10 @@ export default function Settings() {
           </Card.Body>
         </div>
       </section>
-      <section style={{ margin: "2em", marginTop: "8em" }}>
+      <section
+        ref={mnmRef}
+        style={{ paddingTop: "5vh", margin: "2em", marginTop: "8em" }}
+      >
         <div style={{ marginTop: "8em", display: "flex", gap: "1em" }}>
           <div style={{ flex: 2 }}>
             <Card.Body
@@ -597,7 +663,10 @@ export default function Settings() {
           </Card.Body>
         </div>
       </section>
-      <section style={{ margin: "2em", marginTop: "8em" }}>
+      <section
+        ref={ivrRef}
+        style={{ paddingTop: "5vh", margin: "2em", marginTop: "8em" }}
+      >
         <div style={{ marginTop: "8em", display: "flex", gap: "1em" }}>
           <div style={{ flex: 2 }}>
             <Card.Body
@@ -846,7 +915,10 @@ export default function Settings() {
           )}
         </div>
       </section>
-      <section style={{ margin: "2em", marginTop: "8em" }}>
+      <section
+        ref={allocateRef}
+        style={{ paddingTop: "5vh", margin: "2em", marginTop: "8em" }}
+      >
         <Card.Body
           style={{
             padding: "1em",
@@ -909,7 +981,10 @@ export default function Settings() {
           </div>
         </Card.Body>
       </section>
-      <section style={{ margin: "2em", marginTop: "8em" }}>
+      <section
+        ref={extensionRef}
+        style={{ paddingTop: "5vh", margin: "2em", marginTop: "8em" }}
+      >
         <div style={{ display: "flex", gap: "1em" }}>
           <div style={{ flex: 1 }}>
             <Card.Body

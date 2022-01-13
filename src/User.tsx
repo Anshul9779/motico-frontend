@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import AfterCallUser from "./components/AfterCallUser";
 import { Card } from "./components/Card/Card";
 import FrwdToDevice from "./components/FrwdToDevice";
@@ -45,6 +45,12 @@ export default function User() {
   const [selectedNumber, setSelectedNumber] = useState<Phonenumber["_id"][]>(
     []
   );
+  const ref = useRef<HTMLDivElement>(null);
+  const availRef = useRef<HTMLDivElement>(null);
+  const allocateRef = useRef<HTMLDivElement>(null);
+  const afterCallRef = useRef<HTMLDivElement>(null);
+  const smsRef = useRef<HTMLDivElement>(null);
+  const userRef = useRef<HTMLDivElement>(null);
   const { id }: { id: string } = useParams();
   const query = useQuery(
     "registeredPhone",
@@ -139,7 +145,65 @@ export default function User() {
   }
   return (
     <div>
-      <section style={{ minHeight: "80vh" }}>
+      <div
+        style={{
+          top: 0,
+          left: "1em",
+          right: "1em",
+          backgroundColor: "#2C3243",
+          position: "sticky",
+          display: "flex",
+          padding: "0.5em 2em",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() =>
+            userRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          User
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() => ref.current?.scrollIntoView({ behavior: "smooth" })}
+        >
+          Forward to Device
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() =>
+            availRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          Availability
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() =>
+            allocateRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          Allocate Number
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() =>
+            afterCallRef.current?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          After Call
+        </div>
+        <div
+          style={{ padding: "1em", color: "white", cursor: "pointer" }}
+          onClick={() => smsRef.current?.scrollIntoView({ behavior: "smooth" })}
+        >
+          SMS
+        </div>
+      </div>
+      <section style={{ minHeight: "80vh", paddingTop: "10vh" }} ref={userRef}>
         <div
           style={{
             backgroundColor: "white",
@@ -227,13 +291,16 @@ export default function User() {
           </div>
         </div>
       </section>
-      <section style={{ minHeight: "80vh" }}>
+      <section ref={ref} style={{ minHeight: "80vh", paddingTop: "10vh" }}>
         <FrwdToDevice />
       </section>
-      <section style={{ minHeight: "80vh" }}>
+      <section style={{ minHeight: "80vh", paddingTop: "10vh" }} ref={availRef}>
         <TimeZoneUser />
       </section>
-      <section style={{ minHeight: "80vh" }}>
+      <section
+        style={{ minHeight: "80vh", paddingTop: "10vh" }}
+        ref={allocateRef}
+      >
         <div
           style={{
             backgroundColor: "white",
@@ -265,10 +332,13 @@ export default function User() {
           </div>
         </div>
       </section>
-      <section style={{ minHeight: "80vh" }}>
+      <section
+        style={{ minHeight: "80vh", paddingTop: "10vh" }}
+        ref={afterCallRef}
+      >
         <AfterCallUser />
       </section>
-      <section style={{ minHeight: "80vh" }}>
+      <section style={{ minHeight: "80vh", paddingTop: "10vh" }} ref={smsRef}>
         <div style={{ margin: "2em" }}>
           <img
             src={SMS}
