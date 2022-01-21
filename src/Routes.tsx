@@ -23,12 +23,16 @@ import NewUser from "./NewUser";
 import ResetPassword from "./ResetPassword";
 import CallDuration from "./CallDuration";
 import Settings from "./PhoneSettings/Settings";
+import CallRecording from "./Call/CallRecording";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
   return (
     <Router>
       <Switch>
+        <PrivateRoute path="/call/record" redirectTo="/login">
+          <CallRecording />
+        </PrivateRoute>
         <PrivateRoute path="/call" redirectTo="/login">
           <Call />
         </PrivateRoute>

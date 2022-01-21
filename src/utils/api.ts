@@ -9,7 +9,7 @@ import {
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
 // const SERVER_URL = "https://moticosolutions.com/";
-const SERVER_URL = isDev
+export const SERVER_URL = isDev
   ? "http://localhost:8080/"
   : "https://moticosolutions.com/";
 
