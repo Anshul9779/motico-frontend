@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { Spinner } from "react-activity";
 import { useHistory } from "react-router-dom";
 import Dialer from "../components/Dialer";
-import { useUser } from "../utils/hooks";
+import NotAuthorized from "../components/NotAuthorized";
+import { useMe, useUser } from "../utils/hooks";
 import Logo from "./../images/MotiCo Logo.png";
 import Flag from "./Flag";
 import LeftSidebar from "./LeftSidebar";
@@ -14,8 +16,26 @@ export default function Call() {
   const [code, setCode] = useState("+91");
   const [calling, setCalling] = useState(false);
   const { data } = useUser();
-  const [fromNumber, setFromNumber] = useState(data?.phoneNumbers?.[0].number);
+  const [fromNumber, setFromNumber] = useState(data?.phoneNumbers?.[0]?.number);
+  const { data: me } = useMe();
   const history = useHistory();
+
+  console.log({ fromNumber }, data?.phoneNumbers?.[0]?.number);
+  if (!me) {
+    return (
+      <div style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!me.dialler) {
+    return <NotAuthorized />;
+  }
+
+  if (!fromNumber && !data?.phoneNumbers?.[0]?.number) {
+    return <NotAuthorized label="You don't have any assigned phonenumbers" />;
+  }
 
   return (
     <div>

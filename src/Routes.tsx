@@ -25,6 +25,7 @@ import CallDuration from "./CallDuration";
 import Settings from "./PhoneSettings/Settings";
 import CallRecording from "./Call/CallRecording";
 import CallVoicemail from "./Call/CallVoiceMail";
+import Profile from "./Profile";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
@@ -60,6 +61,9 @@ export default function Routes() {
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
           <Route path="/reset" component={ResetPassword} />
+          <PrivateRoute path="/profile" redirectTo="/login">
+            <Profile />
+          </PrivateRoute>
           <PrivateRoute path="/teams/new" redirectTo="/login">
             <NewTeam />
           </PrivateRoute>

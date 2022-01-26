@@ -1,11 +1,15 @@
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
-import { useQuery as useReactQuery } from "react-query";
+import {
+  useMutation,
+  useQuery as useReactQuery,
+  useQueryClient,
+} from "react-query";
 import { axios, getToken } from "./api";
 import { CallRecord, Phonenumber } from "./types";
 import { SOCKET, useSocket } from "../context/SocketContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -29,6 +33,12 @@ interface User {
   email: string;
   roles: string[];
   phoneNumbers: Phonenumber[];
+  phoneNumber: string;
+  reciveUpdates: boolean;
+  missedCallAlert: boolean;
+  voicemailAlert: boolean;
+  dashboard: boolean;
+  dialler: boolean;
 }
 
 interface SocketCallRecord {
@@ -143,4 +153,106 @@ export const useActiveCalls = () => {
   }, []);
 
   return [callIds, callRecords] as const;
+};
+
+export interface UserMe {
+  id: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName?: string;
+  email: string;
+  company: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  reciveUpdates: boolean;
+  missedCallAlert: boolean;
+  voicemailAlert: boolean;
+  dashboard: boolean;
+  dialler: boolean;
+}
+
+export const useMe = () => {
+  return useReactQuery(
+    "me",
+    () => {
+      return axios
+        .get("/api/user/me", {
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+        })
+        .then((res) => res.data as UserMe);
+    },
+    {
+      cacheTime: 5 * 60 * 60 * 1000,
+      staleTime: 5 * 60 * 60 * 1000,
+    }
+  );
+};
+
+export const useForm = <TValue extends Record<string, unknown>>(
+  intialValue: TValue
+) => {
+  const [state, setState] = useState(intialValue);
+  const prevInitialValue = useRef(intialValue);
+
+  const changeState = useCallback((key: keyof TValue, value: unknown) => {
+    console.log("fired", { key, value });
+    setState((prevState) => ({ ...prevState, [key]: value }));
+  }, []);
+
+  useEffect(() => {
+    // Shallow check if object has been changed
+    // Assuming the keys dont change
+    for (const key in intialValue) {
+      if (Object.prototype.hasOwnProperty.call(intialValue, key)) {
+        const element = intialValue[key];
+        const prevElement = prevInitialValue.current[key];
+        if (element !== prevElement) {
+          console.log("appu setting", { element, prevElement });
+          setState(intialValue);
+          prevInitialValue.current = intialValue;
+          break;
+        }
+      }
+    }
+  }, [intialValue]);
+
+  return [state, changeState] as const;
+};
+
+export const useSetMe = () => {
+  type MutationData = Partial<{
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    reciveUpdates: boolean;
+    missedCallAlert: boolean;
+    voicemailAlert: boolean;
+    dashboard: boolean;
+    dialler: boolean;
+  }>;
+  const client = useQueryClient();
+  return useMutation(
+    (data: MutationData) => {
+      return axios
+        .post("/api/user/me", data, {
+          headers: {
+            authorization: "Bearer " + getToken(),
+          },
+        })
+        .then((res) => res.data as UserMe);
+    },
+    {
+      onSuccess: (data) => {
+        client.invalidateQueries("me");
+      },
+      onError: () => {
+        client.invalidateQueries("me");
+      },
+    }
+  );
 };

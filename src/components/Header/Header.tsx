@@ -1,5 +1,5 @@
 import React from "react";
-import { useNotifications } from "../../utils/hooks";
+import { useMe, useNotifications } from "../../utils/hooks";
 import { VscBell, VscBellDot } from "react-icons/vsc";
 import { MdAccountCircle } from "react-icons/md";
 import Button from "../Button";
@@ -9,6 +9,7 @@ import { Menu, MenuItem } from "@szhsin/react-menu";
 
 export default function Header() {
   const { notifications } = useNotifications();
+  useMe();
   return (
     <div
       style={{
@@ -60,10 +61,22 @@ export default function Header() {
         }
         transition
       >
-        <MenuItem>Profile</MenuItem>
         <MenuItem>
           <div style={{ textDecoration: "none" }}>
-            <a href="/logout" style={{ textDecoration: "none" }}>
+            <a
+              href="/profile"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              Profile
+            </a>
+          </div>
+        </MenuItem>
+        <MenuItem>
+          <div style={{ textDecoration: "none" }}>
+            <a
+              href="/logout"
+              style={{ textDecoration: "none", color: "black" }}
+            >
               Logout
             </a>
           </div>

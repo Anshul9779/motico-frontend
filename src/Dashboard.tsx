@@ -5,8 +5,25 @@ import Analytics from "./images/analytics.png";
 import CallDuration from "./images/callduration.png";
 import CallSummary from "./images/call_summary.jpg";
 import StatsCard from "./components/Card/StatsCard";
+import { useMe } from "./utils/hooks";
+import { Spinner } from "react-activity";
+import NotAuthorized from "./components/NotAuthorized";
 
 export default function Dashboard() {
+  const { data } = useMe();
+
+  if (!data) {
+    return (
+      <div style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!data.dashboard) {
+    return <NotAuthorized />;
+  }
+
   return (
     <div style={{ flex: 1 }}>
       <div style={{ backgroundColor: "white", paddingLeft: "1.5rem" }}>

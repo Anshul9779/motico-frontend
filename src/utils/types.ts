@@ -12,6 +12,12 @@ export interface LoginPayload extends BasicUser {
   validTime: number;
   roles: string[];
   companyId: string;
+  phoneNumber: string;
+  reciveUpdates: boolean;
+  missedCallAlert: boolean;
+  voicemailAlert: boolean;
+  dashboard: boolean;
+  dialler: boolean;
 }
 
 export interface Phonenumber {
