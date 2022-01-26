@@ -4,6 +4,7 @@ import { useCallRecordings } from "./useCallRecording";
 import Logo from "./../images/MotiCo Logo.png";
 import DataTable from "react-data-table-component";
 import { SERVER_URL } from "../utils/api";
+import { useHistory } from "react-router-dom";
 
 function timeConversion(duration: number) {
   const portions: string[] = [];
@@ -31,7 +32,8 @@ function timeConversion(duration: number) {
 }
 
 function CallRecording() {
-  const { data } = useCallRecordings();
+  const { data, isLoading } = useCallRecordings();
+  const history = useHistory();
 
   return (
     <div>
@@ -47,8 +49,14 @@ function CallRecording() {
         >
           <img
             src={Logo}
+            onClick={() => history.push("/")}
             alt="MotiCo"
-            style={{ objectFit: "contain", width: "80%", padding: "1em" }}
+            style={{
+              objectFit: "contain",
+              width: "80%",
+              padding: "1em",
+              cursor: "pointer",
+            }}
           />
           <LeftSidebar />
         </div>
@@ -60,68 +68,72 @@ function CallRecording() {
             flexDirection: "column",
           }}
         >
-          <DataTable
-            customStyles={{
-              headRow: {
-                style: {
-                  background: "#2B3243",
-                  padding: "0 8px",
+          {isLoading ? (
+            <div style={{ margin: "0.4em auto" }}>Loading data</div>
+          ) : (
+            <DataTable
+              customStyles={{
+                headRow: {
+                  style: {
+                    background: "#2B3243",
+                    padding: "0 8px",
+                  },
                 },
-              },
-              headCells: {
-                style: {
-                  color: "white",
+                headCells: {
+                  style: {
+                    color: "white",
+                  },
                 },
-              },
-              rows: {
-                style: {
-                  background: "rgb(239, 243, 244)",
-                  border: "1px solid rgba(255,0,0,0.5)",
-                  padding: "0 16px",
+                rows: {
+                  style: {
+                    background: "rgb(239, 243, 244)",
+                    border: "1px solid rgba(255,0,0,0.5)",
+                    padding: "0 16px",
+                  },
                 },
-              },
-            }}
-            columns={[
-              {
-                name: "Name",
-                selector: (row) => row.user.name,
-              },
-              {
-                name: "Type",
-                selector: (row) => row.type,
-              },
-              {
-                name: "From",
-                selector: (row) => row.from,
-              },
-              {
-                name: "To",
-                selector: (row) => row.to,
-              },
-              {
-                name: "Duration",
-                selector: (row) => timeConversion(row.duration || 0),
-              },
-              {
-                name: "Recording",
-                selector: (row) => row.recordingURL,
-                cell: (row) => {
-                  if (!row.recordingURL) {
-                    return "NA";
-                  }
-                  return (
-                    <audio controls>
-                      <source
-                        src={`${SERVER_URL}api/aws/${row.recordingURL}`}
-                        type="audio/ogg"
-                      />
-                    </audio>
-                  );
+              }}
+              columns={[
+                {
+                  name: "Name",
+                  selector: (row) => row.user.name,
                 },
-              },
-            ]}
-            data={data ?? []}
-          />
+                {
+                  name: "Type",
+                  selector: (row) => row.type,
+                },
+                {
+                  name: "From",
+                  selector: (row) => row.from,
+                },
+                {
+                  name: "To",
+                  selector: (row) => row.to,
+                },
+                {
+                  name: "Duration",
+                  selector: (row) => timeConversion(row.duration || 0),
+                },
+                {
+                  name: "Recording",
+                  selector: (row) => row.recordingURL,
+                  cell: (row) => {
+                    if (!row.recordingURL) {
+                      return "NA";
+                    }
+                    return (
+                      <audio controls>
+                        <source
+                          src={`${SERVER_URL}api/aws/${row.recordingURL}`}
+                          type="audio/ogg"
+                        />
+                      </audio>
+                    );
+                  },
+                },
+              ]}
+              data={data ?? []}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Dialer from "../components/Dialer";
 import { useUser } from "../utils/hooks";
 import Logo from "./../images/MotiCo Logo.png";
@@ -14,6 +15,7 @@ export default function Call() {
   const [calling, setCalling] = useState(false);
   const { data } = useUser();
   const [fromNumber, setFromNumber] = useState(data?.phoneNumbers?.[0].number);
+  const history = useHistory();
 
   return (
     <div>
@@ -30,7 +32,13 @@ export default function Call() {
           <img
             src={Logo}
             alt="MotiCo"
-            style={{ objectFit: "contain", width: "80%", padding: "1em" }}
+            onClick={() => history.push("/")}
+            style={{
+              objectFit: "contain",
+              width: "80%",
+              padding: "1em",
+              cursor: "pointer",
+            }}
           />
           <LeftSidebar />
         </div>

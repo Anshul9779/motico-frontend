@@ -24,12 +24,16 @@ import ResetPassword from "./ResetPassword";
 import CallDuration from "./CallDuration";
 import Settings from "./PhoneSettings/Settings";
 import CallRecording from "./Call/CallRecording";
+import CallVoicemail from "./Call/CallVoiceMail";
 
 export default function Routes() {
   const { isAuthenticated } = useAuth();
   return (
     <Router>
       <Switch>
+        <PrivateRoute path="/call/voicemail" redirectTo="/login">
+          <CallVoicemail />
+        </PrivateRoute>
         <PrivateRoute path="/call/record" redirectTo="/login">
           <CallRecording />
         </PrivateRoute>

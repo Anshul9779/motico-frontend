@@ -22,14 +22,14 @@ type DialerStatus =
   | "ERROR";
 
 const STATUS_TO_MSG: Record<DialerStatus, string> = {
-  "ON CALL": "On Call",
+  "ON CALL": "Disconnect",
   CONNECTING: "Connecting",
-  DISCONNECTED: "Disconnected",
-  ERROR: "Error",
+  DISCONNECTED: "Call",
+  ERROR: "Error Uploading, call disconnected",
   IDLE: "Call",
   READY: "Call",
   RINGING: "Ringing",
-  UPLOADING: "Uploading",
+  UPLOADING: "Uploading recording",
 };
 
 const uploadToS3 = async ({

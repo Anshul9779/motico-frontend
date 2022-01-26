@@ -1,9 +1,41 @@
 import React from "react";
 import { MdAccountCircle } from "react-icons/md";
+import { useHistory } from "react-router-dom";
 import { useAuth } from "../utils/hooks";
+
+const SideBarButton = ({
+  name,
+  onClick,
+}: {
+  name: string;
+  onClick?: () => void;
+}) => {
+  return (
+    <button
+      style={{
+        border: "none",
+        outline: "none",
+        padding: "0.75em 1.75em",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: "0.3em",
+        cursor: "pointer",
+        alignSelf: "stretch",
+        boxShadow: "0px 0px 3px 2px rgba(0,0,0,0.39)",
+        margin: "0.5em auto",
+      }}
+      onClick={onClick}
+    >
+      {name}
+    </button>
+  );
+};
 
 export default function LeftSidebar() {
   const { firstName, email } = useAuth();
+  const history = useHistory();
 
   return (
     <div
@@ -40,6 +72,21 @@ export default function LeftSidebar() {
         }}
       >
         {email}
+      </div>
+      <div
+        style={{
+          marginTop: "2em",
+        }}
+      >
+        <SideBarButton name="Dialer" onClick={() => history.push("/call")} />
+        <SideBarButton
+          name="Call Recordings"
+          onClick={() => history.push("/call/record")}
+        />
+        <SideBarButton
+          name="Voicemails"
+          onClick={() => history.push("/call/voicemail")}
+        />
       </div>
     </div>
   );
