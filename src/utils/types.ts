@@ -1,9 +1,12 @@
+import { UserMe } from "./hooks";
+
 export interface BasicUser {
   firstName: string;
   lastName?: string;
   email: string;
-  id: string;
-  phoneNumbers: string[];
+  id: number;
+  phoneNumbers: Phonenumber[];
+  team: Team | null;
 }
 
 export interface LoginPayload extends BasicUser {
@@ -21,20 +24,45 @@ export interface LoginPayload extends BasicUser {
 }
 
 export interface Phonenumber {
-  area: string;
-  assignedTo: string[];
-  available: boolean;
-  company: string;
-  number: string;
-  cost: number;
-  country: string;
-  isRecording: boolean;
+  id: number;
   name: string;
-  purchasedOn: number;
+  cost: number;
+  number: string;
+  country: string;
+  area: string;
+  companyId: number;
+  purchasedOn: Date;
   twillioId: string;
-  voiceMail: boolean;
-  _id: string;
+  users: UserMe[];
+  teamId: number | null;
+  available: boolean;
 }
+
+export type PhoneNumberDocumentStatus =
+  | "UPLOADED"
+  | "VERIFIED"
+  | "PENDING"
+  | "NOT_UPLOADED";
+
+export type SettingsStatus = "DISABLED" | "TEXT" | "AUDIO";
+
+export type PhoneNumberSettings = {
+  id: number;
+  phoneNumberId: number;
+  allowRecord: boolean;
+  allowPause: boolean;
+  documentStatus: PhoneNumberDocumentStatus;
+  greetingMsgStatus: SettingsStatus;
+  greetingMsgText: string;
+  greetingMsgAudio: string;
+  voicemailStatus: SettingsStatus;
+  voicemailText: string;
+  voicemailAudio: string;
+  ivrEnabled: boolean;
+  ivrMessage: string;
+  ivrDataTeamIds: number[];
+  ivrData: any;
+};
 
 export interface Country {
   name: string;

@@ -185,7 +185,7 @@ export default function Numbers() {
                       backgroundColor: index % 2 !== 0 ? "white" : undefined,
                     }}
                   >
-                    {number.userIds.length}
+                    {number.teamId ? "Team" : number.users.length}
                   </td>
                 </tr>
               );

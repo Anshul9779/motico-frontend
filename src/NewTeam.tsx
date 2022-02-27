@@ -19,7 +19,7 @@ export default function NewTeam() {
 
   const validNumbers =
     numbers?.filter(
-      (number) => number.userIds.length === 0 && number.teamId === null
+      (number) => number.users.length === 0 && number.teamId === null
     ) ?? [];
 
   return (

@@ -1,43 +1,22 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useQueryClient } from "react-query";
 import { useHistory } from "react-router-dom";
 import Button from "./components/Button";
 import { Card } from "./components/Card/Card";
 import Input from "./components/Input";
 import { PhoneCard } from "./User";
-import { axios, getRegisteredPhone, getToken } from "./utils/api";
-import { Phonenumber, Team } from "./utils/types";
+import { axios, getToken } from "./utils/api";
+import { usePhoneNumbers } from "./utils/hooks/usePhoneNumbers";
+import { useTeams } from "./utils/hooks/useTeams";
+import { Phonenumber } from "./utils/types";
 
 export default function NewUser() {
-  const [selectedNumber, setSelectedNumber] = useState<Phonenumber["_id"][]>(
-    []
-  );
+  const [selectedNumber, setSelectedNumber] = useState<Phonenumber["id"][]>([]);
   const history = useHistory();
-  const query = useQuery(
-    "registeredPhone",
-    () => {
-      return getRegisteredPhone();
-    },
-    {
-      staleTime: 5 * 60 * 60 * 1000,
-    }
-  );
-  const teamsQuery = useQuery(
-    "teams",
-    async () => {
-      const data = await axios.post(
-        "/api/teams",
-        {},
-        {
-          headers: { authorization: "Bearer " + getToken() },
-        }
-      );
-      return data.data as Team[];
-    },
-    {
-      staleTime: 5 * 60 * 60 * 1000,
-    }
-  );
+  const { data: numbers, isLoading: numberLoading } = usePhoneNumbers();
+  const teamsQuery = useTeams();
+  const client = useQueryClient();
+
   return (
     <form
       onSubmit={(e) => {
@@ -55,13 +34,16 @@ export default function NewUser() {
               firstName: target.firstName.value,
               lastName: target.lastName.value,
               email: target.email.value,
-              phoneNumberId: selectedNumber,
+              phoneNumbers: selectedNumber,
+              team: parseInt(target.team.value, 10),
             },
             {
               headers: { authorization: "Bearer " + getToken() },
             }
           )
           .then((data) => {
+            client.invalidateQueries("users");
+            client.invalidateQueries("phonenumbers");
             history.push("/users");
           });
       }}
@@ -118,25 +100,26 @@ export default function NewUser() {
           <div style={{ marginTop: "1em" }}>
             <div>Allocate Numbers</div>
             <div style={{ margin: "1.5em", display: "flex", gap: "1em" }}>
-              {query.isLoading ? (
+              {numberLoading ? (
                 <span style={{ marginLeft: "1em", opacity: 0.5 }}>
                   Loading ...
                 </span>
               ) : (
-                query.data?.map((phone, index) => {
+                numbers?.map((phone, index) => {
                   return (
                     <PhoneCard
                       data={phone}
                       index={index}
-                      key={phone._id}
-                      selected={selectedNumber.includes(phone._id)}
+                      key={phone.id}
+                      hasTeam={Boolean(phone.teamId)}
+                      selected={selectedNumber.includes(phone.id)}
                       onClick={() => {
-                        if (selectedNumber.includes(phone._id)) {
+                        if (selectedNumber.includes(phone.id)) {
                           setSelectedNumber(
-                            selectedNumber.filter((n) => n !== phone._id)
+                            selectedNumber.filter((n) => n !== phone.id)
                           );
                         } else {
-                          setSelectedNumber([...selectedNumber, phone._id]);
+                          setSelectedNumber([...selectedNumber, phone.id]);
                         }
                       }}
                     />

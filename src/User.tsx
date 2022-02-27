@@ -17,34 +17,35 @@ export const PhoneCard = ({
   data,
   index,
   selected,
+  hasTeam,
   onClick,
 }: {
   data: Phonenumber;
   index: number;
+  hasTeam: boolean;
   selected?: boolean;
   onClick?: () => void;
 }) => {
   return (
     <Card.Body
-      onClick={onClick}
+      onClick={hasTeam ? undefined : onClick}
       style={{
         borderRadius: "0.5em",
         padding: "1em 2em",
-        cursor: "pointer",
+        cursor: hasTeam ? "not-allowed" : "pointer",
+        opacity: hasTeam ? 0.5 : 1,
         border: selected ? "2px solid black" : "2px solid white",
       }}
       background={index % 2 === 0 ? "gradient" : "orange"}
     >
       <h3>{data.name}</h3>
-      <p>{data.number}</p>
+      <p>{hasTeam ? "Assigned to team" : data.number}</p>
     </Card.Body>
   );
 };
 
 export default function User() {
-  const [selectedNumber, setSelectedNumber] = useState<Phonenumber["_id"][]>(
-    []
-  );
+  const [selectedNumber, setSelectedNumber] = useState<Phonenumber["id"][]>([]);
   const ref = useRef<HTMLDivElement>(null);
   const availRef = useRef<HTMLDivElement>(null);
   const allocateRef = useRef<HTMLDivElement>(null);
@@ -78,7 +79,7 @@ export default function User() {
           .then(
             (data) =>
               data.data as {
-                id: string;
+                id: number;
                 firstName: string;
                 lastName: string;
                 email: string;
@@ -91,23 +92,20 @@ export default function User() {
   );
   useEffect(() => {
     if (query.data && userQuery.data) {
+      const id = userQuery?.data?.id ?? -1;
       setSelectedNumber(
         query.data
-          .filter((phn) =>
-            phn.assignedTo.includes(
-              userQuery?.data?.id ?? "NO_THIS_IS_NOT_ICLUDED"
-            )
-          )
-          .map((phn) => phn._id)
+          .filter((phn) => phn.users.some((user) => user.id === id))
+          .map((phn) => phn.id)
       );
     }
   }, [query.data, userQuery.data]);
 
   useEffect(() => {
     const isEqual = (
-      arr1: string[] | undefined,
-      arr2: string[] | undefined
-    ) => {
+      arr1: any[] | undefined,
+      arr2: any[] | undefined
+    ): boolean => {
       if (!arr1 || !arr2) {
         return false;
       }
@@ -122,9 +120,12 @@ export default function User() {
       }
       return true;
     };
-    const queryPhnIds = query.data
-      ?.filter((phn) => phn.assignedTo.includes(userQuery.data?.id ?? ""))
-      .map((phn) => phn._id);
+    const queryPhnIds =
+      query.data
+        ?.filter((phn) =>
+          phn.users.some((user) => user.id === userQuery.data?.id ?? -1)
+        )
+        .map((phn) => phn.id) ?? [];
     if (userQuery.data && query.data && !isEqual(queryPhnIds, selectedNumber))
       axios.post(
         "/api/phonenumber/assign",
@@ -316,14 +317,15 @@ export default function User() {
                 <PhoneCard
                   data={phone}
                   index={index}
-                  selected={selectedNumber.includes(phone._id)}
+                  hasTeam={Boolean(phone.teamId)}
+                  selected={selectedNumber.includes(phone.id)}
                   onClick={() => {
-                    if (selectedNumber.includes(phone._id)) {
+                    if (selectedNumber.includes(phone.id)) {
                       setSelectedNumber(
-                        selectedNumber.filter((n) => n !== phone._id)
+                        selectedNumber.filter((n) => n !== phone.id)
                       );
                     } else {
-                      setSelectedNumber([...selectedNumber, phone._id]);
+                      setSelectedNumber([...selectedNumber, phone.id]);
                     }
                   }}
                 />

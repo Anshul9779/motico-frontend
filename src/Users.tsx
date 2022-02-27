@@ -3,48 +3,20 @@ import { useHistory } from "react-router-dom";
 import Setting from "./images/settings.png";
 import Delete from "./images/delete.png";
 import NewTeam from "./images/NewUser.png";
-import { useMutation, useQuery } from "react-query";
-import { axios, getToken } from "./utils/api";
-import { BasicUser } from "./utils/types";
 import DataTable from "react-data-table-component";
+import { useCompanyUsers, useDeleteUser } from "./utils/hooks/useCompanyUsers";
+import { Spinner } from "react-activity";
 
 export default function Users() {
   const history = useHistory();
-  const query = useQuery(
-    "users",
-    () => {
-      return axios
-        .post(
-          "/api/admin/user/get-company",
-          {},
-          {
-            headers: { authorization: "Bearer " + getToken() },
-          }
-        )
-        .then((data) => data.data as BasicUser[]);
-    },
-    {
-      staleTime: 5 * 60 * 60 * 1000,
-    }
-  );
-  const mutation = useMutation(
-    (userId: string) => {
-      return axios.post(
-        "/api/admin/user/delete",
-        {
-          userId,
-        },
-        {
-          headers: { authorization: "Bearer " + getToken() },
-        }
-      );
-    },
-    {
-      onSuccess() {
-        query.refetch();
-      },
-    }
-  );
+
+  const { isLoading, data: users } = useCompanyUsers();
+  const { mutate } = useDeleteUser();
+
+  if (isLoading || !users) {
+    return <Spinner />;
+  }
+
   return (
     <div style={{ padding: "2em 1em" }}>
       <div
@@ -73,6 +45,7 @@ export default function Users() {
                   borderRadius: 8,
                   margin: "8px 0",
                   padding: "0 8px",
+                  cursor: "pointer",
                 },
               },
             }}
@@ -109,6 +82,7 @@ export default function Users() {
                       <img
                         src={Setting}
                         alt="Setting"
+                        onClick={() => history.push(`users/${row.id}`)}
                         style={{
                           objectFit: "contain",
                           maxHeight: 25,
@@ -123,7 +97,7 @@ export default function Users() {
                             `Do you want to delete ${row.name} user?`
                           );
                           if (doDelete) {
-                            mutation.mutate(row.id);
+                            mutate(row.id);
                           }
                         }}
                         style={{
@@ -141,7 +115,7 @@ export default function Users() {
               history.push(`users/${row.id}`);
             }}
             data={
-              query.data?.map((user) => {
+              users.map((user) => {
                 return {
                   name: user.firstName + (user.lastName ?? ""),
                   email: user.email,
