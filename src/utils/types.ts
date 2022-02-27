@@ -62,10 +62,14 @@ export interface AvailablePhoneNumber {
   region: string;
 }
 
+export type TeamCallType = "SIMULTANEOUSLY" | "FIRST_ORDER" | "ROUND_ROBIN";
+
 export interface Team {
-  id: string;
+  id: number;
   name: string;
-  numUsers: number;
+  companyId: number;
+  callType: TeamCallType;
+  createdAt: Date;
 }
 
 export {};

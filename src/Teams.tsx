@@ -3,9 +3,8 @@ import Delete from "./images/delete.png";
 import Setting from "./images/settings.png";
 import NewTeam from "./images/NewTeam.png";
 import { useHistory } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
-import { axios, getToken } from "./utils/api";
-import { Team } from "./utils/types";
+import { useDeleteTeams, useTeams } from "./utils/hooks/useTeams";
+import { Spinner } from "react-activity";
 
 const TeamCard = ({
   name,
@@ -99,6 +98,7 @@ const TeamCard = ({
               objectFit: "contain",
               maxHeight: 25,
               borderRadius: "50%",
+              cursor: "pointer",
             }}
           />
         </div>
@@ -109,40 +109,13 @@ const TeamCard = ({
 
 export default function Teams() {
   const history = useHistory();
-  const query = useQuery(
-    "teams",
-    async () => {
-      const data = await axios.post(
-        "/api/teams",
-        {},
-        {
-          headers: { authorization: "Bearer " + getToken() },
-        }
-      );
-      return data.data as Team[];
-    },
-    {
-      staleTime: 5 * 60 * 60 * 1000,
-    }
-  );
-  const mutation = useMutation(
-    (teamId: string) => {
-      return axios.post(
-        "/api/teams/delete",
-        {
-          teamId,
-        },
-        {
-          headers: { authorization: "Bearer " + getToken() },
-        }
-      );
-    },
-    {
-      onSuccess() {
-        query.refetch();
-      },
-    }
-  );
+  const { isLoading, data: teams } = useTeams();
+  const { mutate } = useDeleteTeams();
+
+  if (isLoading || !teams) {
+    return <Spinner />;
+  }
+
   return (
     <div style={{ padding: "2em 1em" }}>
       <div
@@ -151,13 +124,13 @@ export default function Teams() {
         <div>TEAMS</div>
         <div style={{ marginTop: "1em" }}>
           <div style={{ display: "flex", gap: "1em", flexWrap: "wrap" }}>
-            {query?.data?.map((team) => {
+            {teams.map((team) => {
               return (
                 <TeamCard
-                  count={team.numUsers}
+                  count={team.users.length}
                   name={team.name}
                   onDelete={() => {
-                    mutation.mutate(team.id);
+                    mutate(team.id);
                   }}
                   key={team.id}
                 />
