@@ -8,7 +8,7 @@ interface UserState {
   firstName: string;
   lastName: string;
   email: string;
-  id: string;
+  id: number;
   companyId: string;
   roles: string[];
   validTill: Date;
@@ -20,7 +20,7 @@ const initialState: UserState = {
   firstName: "",
   lastName: "",
   email: "",
-  id: "",
+  id: -1,
   companyId: "",
   roles: [],
   validTill: new Date(),
@@ -79,7 +79,7 @@ export const userSlice = createSlice({
       state.firstName = "";
       state.lastName = "";
       state.email = "";
-      state.id = "";
+      state.id = -1;
       state.roles = [];
       state.companyId = "";
       state.validTill = new Date();

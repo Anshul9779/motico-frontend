@@ -4,6 +4,7 @@ import {
   Country,
   LoginPayload,
   Phonenumber,
+  PhoneNumberSettings,
 } from "./types";
 
 const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
@@ -32,7 +33,7 @@ export const login = async (
 export const resetPassword = async (
   oldPassword: string,
   newPassword: string,
-  userId: string
+  userId: number
 ) => {
   return axios
     .post("/api/reset-password", {
@@ -152,12 +153,15 @@ export const callAnalyticsCummulated = async () => {
 export const getRegisteredPhone = () => {
   const token = getToken();
   return axios
-    .get("/api/phonenumber/registered", {
+    .get("/api/phonenumber", {
       headers: {
         authorization: "Bearer " + token,
       },
     })
-    .then((data) => data.data as Phonenumber[]);
+    .then(
+      (data) =>
+        data.data as Array<Phonenumber & { settings: PhoneNumberSettings }>
+    );
 };
 
 export const getAvailablePhoneNumbers = (

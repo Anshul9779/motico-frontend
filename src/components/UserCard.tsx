@@ -1,16 +1,21 @@
 import React from "react";
+import { Team } from "../utils/types";
 
 export default function UserCard({
   name,
   email,
   selected,
   onClick,
+  team,
 }: {
   name: string;
   email: string;
+  team: Team | null;
   selected?: boolean;
   onClick?: () => void;
 }) {
+  const hasTeam = Boolean(team);
+
   return (
     <div
       onClick={onClick}
@@ -20,10 +25,12 @@ export default function UserCard({
         textAlign: "center",
         borderRadius: "1em",
         border: "5px solid white",
+        cursor: hasTeam ? "not-allowed" : "pointer",
+        opacity: hasTeam ? 0.6 : 1,
       }}
     >
       <h3>{name}</h3>
-      <h3>{email}</h3>
+      <p>{hasTeam ? "Already in a team" : email} </p>
     </div>
   );
 }

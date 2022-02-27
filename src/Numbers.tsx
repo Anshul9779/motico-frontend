@@ -1,15 +1,17 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { Spinner } from "react-activity";
 import { useHistory } from "react-router";
 import Button from "./components/Button";
 import Input from "./components/Input";
-import { getRegisteredPhone } from "./utils/api";
+import { usePhoneNumbers } from "./utils/hooks/usePhoneNumbers";
 
 export default function Numbers() {
-  const { data: numbers } = useQuery("registeredPhone", () => {
-    return getRegisteredPhone();
-  });
+  const { data: numbers, isLoading } = usePhoneNumbers();
   const history = useHistory();
+
+  if (!numbers || isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div style={{ padding: "1.5em" }}>
@@ -116,10 +118,11 @@ export default function Numbers() {
                     marginTop: "2em",
                     backgroundColor: "#EFF3F4",
                     borderRadius: 8,
+                    cursor: "pointer",
                   }}
-                  key={number._id}
+                  key={number.id}
                   onClick={() => {
-                    history.push(`/numbers/settings/${number._id}`);
+                    history.push(`/numbers/settings/${number.id}`);
                   }}
                 >
                   <td
@@ -150,7 +153,7 @@ export default function Numbers() {
                       backgroundColor: index % 2 !== 0 ? "white" : undefined,
                     }}
                   >
-                    {number.isRecording ? "Enabled" : "Disabled"}
+                    {number.settings.allowRecord ? "Enabled" : "Disabled"}
                   </td>
                   <td
                     style={{
@@ -160,7 +163,9 @@ export default function Numbers() {
                       backgroundColor: index % 2 !== 0 ? "white" : undefined,
                     }}
                   >
-                    {number.voiceMail ? "Enabled" : "Disabled"}
+                    {number.settings.voicemailStatus !== "DISABLED"
+                      ? "Enabled"
+                      : "Disabled"}
                   </td>
                   <td
                     style={{
@@ -180,7 +185,7 @@ export default function Numbers() {
                       backgroundColor: index % 2 !== 0 ? "white" : undefined,
                     }}
                   >
-                    {number.assignedTo.length}
+                    {number.userIds.length}
                   </td>
                 </tr>
               );
