@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LoginPayload } from "../../utils/types";
+import jwt_decode from "jwt-decode";
 
 interface UserState {
   isAuthenticated: boolean;
@@ -25,17 +26,34 @@ const initialState: UserState = {
   validTill: new Date(),
 };
 
+type DecodedToken = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  personalNumber?: any;
+  roles: string[];
+  email: string;
+  teamId?: any;
+  companyId: number;
+  settingsId: number;
+  createdAt: Date;
+  validTime: number;
+  iat: number;
+  exp: number;
+};
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     addUser: (state, action: PayloadAction<LoginPayload>) => {
+      const decoded: DecodedToken = jwt_decode(action.payload.token);
       // Also save the token in localstorage
       localStorage.setItem(
         "TOKEN",
         JSON.stringify({
           token: action.payload.token,
-          validTill: action.payload.issuedAt + action.payload.validTime,
+          validTill: decoded.exp * 1000,
         })
       );
       state.isAuthenticated = true;

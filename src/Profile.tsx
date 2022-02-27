@@ -11,16 +11,16 @@ export default function Profile() {
   const [form, setForm] = useForm({
     firstName: data?.firstName ?? "",
     lastName: data?.lastName ?? "",
-    phoneNumber: data?.phoneNumber ?? "",
+    phoneNumber: data?.personalNumber ?? "",
     email: data?.email ?? "",
   });
 
   const [settings, setSettings] = useForm({
-    reciveUpdates: data?.reciveUpdates ?? false,
-    missedCallAlert: data?.missedCallAlert ?? false,
-    voicemailAlert: data?.voicemailAlert ?? false,
-    dashboard: data?.dashboard ?? false,
-    dialler: data?.dialler ?? false,
+    recieveUpdates: data?.settings.recieveUpdates ?? false,
+    missedCallAlert: data?.settings.missedCallAlert ?? false,
+    voicemailAlert: data?.settings.voicemailAlert ?? false,
+    showDashboard: data?.settings.showDashboard ?? false,
+    showDialler: data?.settings.showDialler ?? false,
   });
 
   const { mutate } = useSetMe();
@@ -28,7 +28,7 @@ export default function Profile() {
   const disabled =
     form.firstName === data?.firstName &&
     form.lastName === data.lastName &&
-    form.phoneNumber === data.phoneNumber &&
+    form.phoneNumber === data.personalNumber &&
     form.email === data.email;
 
   return (
@@ -141,11 +141,11 @@ export default function Profile() {
               marginTop: "0.5em",
             }}
           >
-            Recive Updates
+            Recieve Updates
             <Toggle
-              checked={settings.reciveUpdates}
+              checked={settings.recieveUpdates}
               onChange={(e) =>
-                setSettings("reciveUpdates", !settings.reciveUpdates)
+                setSettings("recieveUpdates", !settings.recieveUpdates)
               }
             />
           </div>
@@ -194,8 +194,10 @@ export default function Profile() {
           >
             Dashboard
             <Toggle
-              checked={settings.dashboard}
-              onChange={(e) => setSettings("dashboard", !settings.dashboard)}
+              checked={settings.showDashboard}
+              onChange={(e) =>
+                setSettings("showDashboard", !settings.showDashboard)
+              }
             />
           </div>
           <div
@@ -209,15 +211,25 @@ export default function Profile() {
           >
             Dialler
             <Toggle
-              checked={settings.dialler}
-              onChange={(e) => setSettings("dialler", !settings.dialler)}
+              checked={settings.showDialler}
+              onChange={(e) =>
+                setSettings("showDialler", !settings.showDialler)
+              }
             />
           </div>
           <div style={{ marginTop: "2em", display: "flex", flex: "column" }}>
             <Button
               title="Save"
               onClick={() => {
-                mutate(settings);
+                if (data) {
+                  mutate({
+                    ...data,
+                    settings: {
+                      ...data.settings,
+                      ...settings,
+                    },
+                  });
+                }
               }}
             />
           </div>

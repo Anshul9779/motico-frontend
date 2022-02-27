@@ -22,7 +22,7 @@ export const login = async (
   email: string,
   password: string
 ): Promise<LoginPayload> => {
-  const data = await axios.post("/api/login", {
+  const data = await axios.post("/api/auth/login", {
     email,
     password,
   });

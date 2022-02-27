@@ -20,7 +20,9 @@ export default function Dashboard() {
     );
   }
 
-  if (!data.dashboard) {
+  const { settings } = data;
+
+  if (!settings.showDashboard) {
     return <NotAuthorized />;
   }
 

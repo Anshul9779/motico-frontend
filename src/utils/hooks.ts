@@ -156,22 +156,35 @@ export const useActiveCalls = () => {
 };
 
 export interface UserMe {
-  id: string;
-  phoneNumber: string;
+  id: number;
   firstName: string;
-  lastName?: string;
+  lastName: string | null;
+  personalNumber: string | null;
+  roles: string[];
   email: string;
-  company: {
-    _id: string;
-    name: string;
-    email: string;
-  };
-  reciveUpdates: boolean;
+  password: string;
+  teamId: number | null;
+  company: Company;
+  createdAt: Date;
+  settings: UserSettings;
+}
+
+export type Company = {
+  id: number;
+  name: string;
+  details: string | null;
+  createdAt: Date;
+};
+
+export type UserSettings = {
+  id: number;
+  recieveUpdates: boolean;
   missedCallAlert: boolean;
   voicemailAlert: boolean;
-  dashboard: boolean;
-  dialler: boolean;
-}
+  showDashboard: boolean;
+  showDialler: boolean;
+  createdAt: Date;
+};
 
 export const useMe = () => {
   return useReactQuery(
@@ -199,7 +212,6 @@ export const useForm = <TValue extends Record<string, unknown>>(
   const prevInitialValue = useRef(intialValue);
 
   const changeState = useCallback((key: keyof TValue, value: unknown) => {
-    console.log("fired", { key, value });
     setState((prevState) => ({ ...prevState, [key]: value }));
   }, []);
 
@@ -211,7 +223,6 @@ export const useForm = <TValue extends Record<string, unknown>>(
         const element = intialValue[key];
         const prevElement = prevInitialValue.current[key];
         if (element !== prevElement) {
-          console.log("appu setting", { element, prevElement });
           setState(intialValue);
           prevInitialValue.current = intialValue;
           break;
@@ -224,17 +235,7 @@ export const useForm = <TValue extends Record<string, unknown>>(
 };
 
 export const useSetMe = () => {
-  type MutationData = Partial<{
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    email: string;
-    reciveUpdates: boolean;
-    missedCallAlert: boolean;
-    voicemailAlert: boolean;
-    dashboard: boolean;
-    dialler: boolean;
-  }>;
+  type MutationData = Partial<UserMe>;
   const client = useQueryClient();
   return useMutation(
     (data: MutationData) => {

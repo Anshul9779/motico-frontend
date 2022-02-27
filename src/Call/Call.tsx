@@ -29,7 +29,9 @@ export default function Call() {
     );
   }
 
-  if (!me.dialler) {
+  const { settings } = me;
+
+  if (!settings.showDialler) {
     return <NotAuthorized />;
   }
 
